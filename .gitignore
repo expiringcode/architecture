@@ -1,3 +1,5 @@
-sites-available/*
-data/*
-logs/*
+sites-available/
+data/mysql
+data/www
+logs/mysql
+logs/nginx
