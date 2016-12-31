@@ -1,76 +1,79 @@
 version: '2'
 
 services:
-  # BUILD PHP
-   php: 
-     build: ./images/php/7.0
-     restart: always
-     tty: true
-     expose: 
-       - "9000"
-     volumes: 
-       - ./data/www:/www
-       - ./conf/php-7.0:/etc/php/7.0/fpm
-       - ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
-     links:
-       - db:mysql
-     networks:
-       - int
-       - ext
-  
+  # BUILD PHP 7
+  php: 
+   build: ./images/php/7.0
+   restart: always
+   tty: true
+   expose: 
+     - "9000"
+   volumes: 
+     - ./data/www:/www
+     - ./conf/php-7.0:/etc/php/7.0/fpm
+     - ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
+   links:
+     - db:mysql
+   networks:
+     - int
+     - ext
+
   # BUILD PHP 5.6
-   legacy: 
-     build: ./images/php/5.6
-     restart: always
-     tty: true
-     expose: 
-       - "9001"
-     volumes: 
-       - ./data/www:/www
-       - ./conf/php-5.6:/etc/php/5.6/fpm
-       - ./logs/php/php5.6-fpm.log:/var/log/php5.6-fpm.log
-     links:
-       - db:mysql
-     networks:
-       - int
-       - ext
+  legacy: 
+   build: ./images/php/5.6
+   restart: always
+   tty: true
+   expose: 
+     - "9001"
+   volumes: 
+     - ./data/www:/www
+     - ./conf/php-5.6:/etc/php/5.6/fpm
+     - ./logs/php/php5.6-fpm.log:/var/log/php5.6-fpm.log
+   links:
+     - db:mysql
+   networks:
+     - int
+     - ext
 
   # MYSQL 
-   db:
-     image: mysql:5.7
-     volumes:
-       - ./data/mysql:/var/lib/mysql
-       - ./conf/mysql:/etc/mysql:ro
-       - ./logs/mysql:/var/log/mysql
-     restart: always
-     expose: 
-       - "3306"
-     environment:
-       MYSQL_ROOT_PASSWORD: wordpress
-     networks:
-       - int
+  db:
+   image: mysql:5.7
+   volumes:
+     - ./data/mysql:/var/lib/mysql
+     - ./conf/mysql:/etc/mysql:ro
+     - ./logs/mysql:/var/log/mysql
+   restart: always
+   expose: 
+     - "3306"
+   environment:
+     MYSQL_ROOT_PASSWORD: "root_password"
+     MYSQL_USER: "admin"
+     MYSQL_PASSWORD: "admin"
+     MYSQL_DATABASE: "test"
+   networks:
+    - int
 
-  # NGINX 
-   proxy:
-     depends_on:
-       - db
-       - php
-     links:
-       - db:mysql
-       - php:php7
-     image: nginx:alpine
-     volumes: 
-       - ./conf/nginx:/etc/nginx:ro
-       - ./data/www:/www:ro
-       - ./logs/nginx:/var/log/nginx
-     restart: always
-     ports:
-       - "8880:80"
-       - "8443:443"
-     restart: always
-     networks:
-       - int
-       - ext
+  # # NGINX 
+  proxy:
+   depends_on:
+     - db
+     - php
+   links:
+     - db:mysql
+     - php:php7
+   image: nginx:alpine
+   volumes: 
+     - ./conf/nginx:/etc/nginx:ro
+     - ./data/www:/www:ro
+     - ./logs/nginx:/var/log/nginx
+   restart: always
+   ports:
+     - "8880:80"
+     - "8443:443"
+   restart: always
+   networks:
+     - int
+     - ext
 
 networks: 
   int:

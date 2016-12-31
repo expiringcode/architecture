@@ -21,12 +21,6 @@ set -e
 	echo '[www]'; \
 	echo 'listen = [::]:9000'; \
 } | tee /etc/php/7.0/fpm/pool.d/zz-docker.conf \
-&& curl -sS https://getcomposer.org/installer | php \
-&& mv composer.phar /usr/local/bin/composer \
-&& chmod +x /usr/local/bin/composer \
-&& curl -LO https://deployer.org/deployer.phar \
-&& mv deployer.phar /usr/local/bin/dep \
-&& chmod +x /usr/local/bin/dep \
 && service php7.0-fpm start 
 
 # first arg is `-f` or `--some-option`
