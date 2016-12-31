@@ -1,0 +1,19 @@
+
+#
+#       MARKET PRODUCTION TEST
+#
+server {
+    listen 80;
+    server_name market.progress44.com;
+    root /var/www/progress44/market;
+    
+    include snippets/common;
+
+    include snippets/deny;
+
+    include snippets/rewrite;
+
+    include snippets/hhphp5.6;
+
+    include snippets/caching;
+}

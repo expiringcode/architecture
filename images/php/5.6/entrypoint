@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+
+{ \
+	echo '[global]'; \
+	echo 'error_log = /proc/self/fd/2'; \
+	echo; \
+	echo '[www]'; \
+	echo '; if we send this to /proc/self/fd/1, it never appears'; \
+	echo 'access.log = /proc/self/fd/2'; \
+	echo; \
+	echo 'clear_env = no'; \
+	echo; \
+	echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+	echo 'catch_workers_output = yes'; \
+} | tee /etc/php/5.6/fpm/pool.d/docker.conf \
+&& { \
+	echo '[global]'; \
+	echo 'daemonize = no'; \
+	echo; \
+	echo '[www]'; \
+	echo 'listen = [::]:9001'; \
+} | tee /etc/php/5.6/fpm/pool.d/zz-docker.conf \
+&& curl -sS https://getcomposer.org/installer | php \
+&& mv composer.phar /usr/local/bin/composer \
+&& chmod +x /usr/local/bin/composer \
+&& curl -LO https://deployer.org/deployer.phar \
+&& mv deployer.phar /usr/local/bin/dep \
+&& chmod +x /usr/local/bin/dep \
+&& service php5.6-fpm start 
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- php "$@"
+fi
+
+exec "$@"

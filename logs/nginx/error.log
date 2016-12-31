@@ -1,0 +1,1 @@
+2016/12/30 22:29:30 [error] 7#7: *1 connect() failed (113: Host is unreachable) while connecting to upstream, client: 172.21.0.1, server: 127.0.0.1, request: "GET / HTTP/1.1", upstream: "fastcgi://172.21.0.3:9000", host: "localhost:8880"

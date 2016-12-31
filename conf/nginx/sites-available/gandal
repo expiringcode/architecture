@@ -1,0 +1,26 @@
+#
+#       GANDAL DEVELOPMENT
+#
+server {
+    listen 80;
+    server_name store.progress44.com ganda.al;
+    root /var/www/progress44/templates/wordpress/tmp2;
+
+    include snippets/common;
+
+    include snippets/deny;
+
+    # Enabling PHP parsing for this domain
+    location ~ \.php$ {
+      if (!-e $request_filename) {
+                rewrite / /index.php last;
+        }
+        expires off;
+            fastcgi_pass unix:/var/run/php/php5-6-fpm.sock;
+            fastcgi_index index.php;
+            include fastcgi.conf;
+            fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    }
+
+    include snippets/caching;
+}

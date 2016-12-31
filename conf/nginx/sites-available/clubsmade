@@ -1,0 +1,33 @@
+#
+#       REWRITE TO SEND WWW.MY.CLUBSMADE.COM TO MY.CLUBSMADE.COM
+#
+# server {
+#        listen 80;
+#        server_name www.my.clubsmade.com;
+#        return 301 http://my.clubsmade.com$request_uri;
+# }
+
+#
+#       MY.CLUBSMADE.COM PRIMARY
+#
+server {
+        server_name my.clubsmade.com mobile.clubsmade.com cm.progress44.com;
+        root /var/www/cm.progress44.com/my;
+        
+        include snippets/sslhttp2;
+        ssl_certificate /etc/letsencrypt/live/cm.progress44.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/cm.progress44.com/privkey.pem;
+
+        include snippets/common;
+
+        include snippets/deny;
+
+        include snippets/rewrite;
+
+        # Enabling PHP parsing for this domain
+        include snippets/hhphp7;
+
+        # Enabling Caching for static content
+        include snippets/caching;
+}
+

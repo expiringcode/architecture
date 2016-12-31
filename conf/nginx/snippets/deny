@@ -1,0 +1,13 @@
+
+## Security
+	# Deny access to special dirs or files or source files
+	location ~* \.(engine|inc|info|install|make|module|profile|test|po|sh|.*sql|theme|tpl(\.php)?|xtmpl)$|^(\..*|Entries.*|Repository|Root|Tag|Template)$|\.php_ {
+            deny all;
+    }
+
+  	# Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
+	location ~ /\. {
+	    deny all;
+	    access_log off;
+	    log_not_found off;
+	}

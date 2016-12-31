@@ -1,0 +1,17 @@
+#
+#       Progress44 DEVELOPMENT DOMAIN
+#
+server {
+    listen 80;
+    server_name dev.progress44.com;
+    root /var/www/progress44;
+
+    include snippets/common;
+
+    include snippets/deny;
+    
+    include snippets/hhphp5.6;
+
+
+    include snippets/caching;
+}

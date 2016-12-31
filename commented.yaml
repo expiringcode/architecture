@@ -1,0 +1,96 @@
+# NGINX 
+   proxy:
+     #cpu_shares: 73
+     #cpu_quota: 50000
+     #cpuset: 0,1
+     #mem_limit: 1000000000
+     #memswap_limit: 2000000000
+     #privileged: true
+     #read_only: true
+     #shm_size: 64M
+     #stdin_open: true
+     #tty: true
+     depends_on:
+       - db
+       - php
+     links:
+       - db:mysql
+       - php:php7
+     image: nginx:alpine
+     volumes: 
+       - ./conf/nginx:/etc/nginx/sites-enabled/:ro
+       - ./data/www:/usr/share/nginx/html:ro
+     restart: always
+     ports:
+       - "8880:80"
+       - "8443:443"
+     restart: always
+     networks:
+       - int
+       - ext
+
+# MYSQL 
+   db:
+     image: mysql:5.7
+     volumes:
+       - ./data/mysql:/var/lib/mysql
+       #- ./conf/mysql:/etc/mysql:ro
+     restart: always
+     expose: 
+       - "3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: wordpress
+     networks:
+       - int
+
+ # REDIS
+   redis:
+     image: redis
+     expose: 
+      - "6379"
+     restart: always
+     networks:
+       - int
+  
+  # MONGODB
+   mongo: 
+     image: mongo
+     expose: 
+      - "27017" # If it is a local development system leave this. Remove for production
+     volumes: 
+      - ./data/mongodb:/data/db
+     restart: always
+     networks:
+       - int
+  
+  # CASSANDRA
+   cassandra: 
+     image: cassandra:latest
+     expose: 
+      - "7000" # If it is a local development system leave this. Remove for production
+     volumes: 
+      - ./data/cassandra:/var/lib/cassandra
+     restart: always
+     networks:
+       - int
+
+  # NODEJS Server
+   nodejs: 
+     image: node:latest
+     expose:
+       - "27017" # Exposes the port only to the containers using this container and not the host system
+     restart: always
+     networks:
+       - int
+  
+  # INFLUX DB
+   influxdb: 
+     image: influxdb:alpine
+     expose: 
+       - "8086" # If it is a local development system leave this. Remove for production
+       - "8083" # If it is a local development system leave this. Remove for production
+     volumes: 
+       - ./data/influxdb:/var/lib/influxdb
+     restart: always
+     networks:
+       - int

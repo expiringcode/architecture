@@ -1,0 +1,22 @@
+
+#
+#       PHP7 WITH LETSENCRYPT
+#
+server {
+        include snippets/sslhttp2;
+        ssl_certificate /etc/letsencrypt/live/dev7.progress44.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/dev7.progress44.com/privkey.pem;
+
+        server_name dev7.progress44.com;
+        root /var/www/dev7;
+
+        include snippets/common;
+
+        include snippets/deny;
+
+        include snippets/rewrite;
+
+        include snippets/hhphp7;
+
+        include snippets/caching;
+}

@@ -1,0 +1,37 @@
+
+#
+# PARSE PROXY
+#
+server {
+    listen 80;
+
+    server_name api.parse.progress44.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:1337;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+
+#
+# PARSE DASHBOARD PROXY
+#
+server {
+    listen 80;
+
+    server_name parse.progress44.com;
+
+    location / {
+        proxy_pass http://0.0.0.0:4040;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
