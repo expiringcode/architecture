@@ -14,6 +14,7 @@ services:
      - ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
    links:
      - db:mysql
+     - redis
    networks:
      - int
      - ext
@@ -31,6 +32,7 @@ services:
      - ./logs/php/php5.6-fpm.log:/var/log/php5.6-fpm.log
    links:
      - db:mysql
+     - redis
    networks:
      - int
      - ext
@@ -52,6 +54,18 @@ services:
      MYSQL_DATABASE: "test"
    networks:
     - int
+  
+  # REDIS
+  redis:
+   image: redis
+   expose: 
+    - "6379"
+   volumes: 
+    - ./data/redis:/data
+    # - ./conf/redis/:/usr/local/etc/redis
+   restart: always
+   networks:
+     - int
 
   # # NGINX 
   proxy:
@@ -70,6 +84,16 @@ services:
    ports:
      - "8880:80"
      - "8443:443"
+   networks:
+     - int
+     - ext
+
+# ALPINE
+  alpine:
+   build: ./images/php/alpine
+   tty: true
+   volumes: 
+     - ./data/alpine:/www:ro
    restart: always
    networks:
      - int
