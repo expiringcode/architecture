@@ -28,6 +28,13 @@ RUN apt-get update \
 		libxml2 \
 		xz-utils \
 		php5.6-fpm \
+		php5.6-mysql \
+		php5.6-curl \
+		php5.6-mbstring \
+		php5.6-gd \
+		php5.6-mysqli \
+		php5.6-xml \
+		php5.6-mcrypt \
 		php-fpdf \
 		php5.6-soap \
 		$PHP_MODS \

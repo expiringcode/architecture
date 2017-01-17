@@ -24,6 +24,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		libxml2 \
 		xz-utils \
 		php \
+		php7.0-mysql \
+		php7.0-curl \
+		php7.0-mbstring \
+		php7.0-gd \
+		php7.0-mysqli \
+		php7.0-xml \
+		php7.0-mcrypt \
 		php-apigen \
 		php-apigen-theme-bootstrap \
 		php-auth \
