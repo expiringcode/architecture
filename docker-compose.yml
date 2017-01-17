@@ -6,11 +6,13 @@ services:
    build: ./images/php/7.0
    restart: always
    tty: true
+   depends_on:
+     - redis
    expose: 
      - "9000"
    volumes: 
      - ./data/www:/www
-     - ./conf/php-7.0:/etc/php/7.0/fpm
+     - ./conf/php-7.0/php.ini:/etc/php/7.0/fpm/php.ini
      - ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
    links:
      - db:mysql
@@ -24,11 +26,13 @@ services:
    build: ./images/php/5.6
    restart: always
    tty: true
+   depends_on:
+     - redis
    expose: 
      - "9001"
    volumes: 
      - ./data/www:/www
-     - ./conf/php-5.6:/etc/php/5.6/fpm
+     - ./conf/php-5.6/php.ini:/etc/php/5.6/fpm/php.ini
      - ./logs/php/php5.6-fpm.log:/var/log/php5.6-fpm.log
    links:
      - db:mysql
@@ -62,7 +66,8 @@ services:
     - "6379"
    volumes: 
     - ./data/redis:/data
-    # - ./conf/redis/:/usr/local/etc/redis
+    - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
    restart: always
    networks:
      - int
@@ -84,17 +89,6 @@ services:
    ports:
      - "8880:80"
      - "8443:443"
-   networks:
-     - int
-     - ext
-
-# ALPINE
-  alpine:
-   build: ./images/php/alpine
-   tty: true
-   volumes: 
-     - ./data/alpine:/www:ro
-   restart: always
    networks:
      - int
      - ext
