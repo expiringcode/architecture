@@ -48,12 +48,12 @@ ENV PHP_INI_DIR /etc/php/7.0/fpm
 ENV PHP_VERSION 7.0
 ENV WORKDIR /www
 
-RUN set -xe && curl -sS https://getcomposer.org/installer | php 
-RUN set -xe && mv composer.phar /usr/local/bin/composer 
-RUN set -xe && chmod +x /usr/local/bin/composer 
-RUN set -xe && curl -LO https://deployer.org/deployer.phar 
-RUN set -xe && mv deployer.phar /usr/local/bin/dep 
-RUN set -xe && chmod +x /usr/local/bin/dep
+# RUN set -xe && curl -sS https://getcomposer.org/installer | php 
+# RUN set -xe && mv composer.phar /usr/local/bin/composer 
+# RUN set -xe && chmod +x /usr/local/bin/composer 
+# RUN set -xe && curl -LO https://deployer.org/deployer.phar 
+# RUN set -xe && mv deployer.phar /usr/local/bin/dep 
+# RUN set -xe && chmod +x /usr/local/bin/dep
 
 WORKDIR $WORKDIR
 
