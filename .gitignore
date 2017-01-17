@@ -3,3 +3,4 @@ data/mysql
 data/www
 logs/mysql
 logs/nginx
+data/redis
