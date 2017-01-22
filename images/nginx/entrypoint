@@ -1,0 +1,9 @@
+set -e
+
+if [ "$ENVIRONMENT" = "PRODUCTION" ]; then
+	if [ -n "$SSLOPTS" ]; then
+		`echo "letsencrypt certonly --webroot $SSLOPTS"`;
+	fi
+fi
+
+exec "$@"

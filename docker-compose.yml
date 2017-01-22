@@ -6,8 +6,6 @@ services:
    build: ./images/php/7.0
    restart: always
    tty: true
-   depends_on:
-     - redis
    expose: 
      - "9000"
    volumes: 
@@ -21,15 +19,13 @@ services:
      - int
      - ext
 
-  # BUILD PHP 5.6
+  # # BUILD PHP 5.6
   legacy: 
    build: ./images/php/5.6
    restart: always
    tty: true
-   depends_on:
-     - redis
    expose: 
-     - "9001"
+     - "9000"
    volumes: 
      - ./data/www:/www
      - ./conf/php-5.6/php.ini:/etc/php/5.6/fpm/php.ini
@@ -41,7 +37,7 @@ services:
      - int
      - ext
 
-  # MYSQL 
+  # # MYSQL 
   db:
    image: mysql:5.7
    volumes:
@@ -59,7 +55,7 @@ services:
    networks:
     - int
   
-  # REDIS
+  # # REDIS
   redis:
    image: redis
    expose: 
@@ -72,24 +68,32 @@ services:
    networks:
      - int
 
-  # # NGINX 
   proxy:
-   depends_on:
+    build: ./images/nginx
+    restart: always
+    tty: true
+    environment: 
+     WORKDIR: "/www"
+     SSLOPTS: "-w /www/7.0 -d progress44.com -d dev7.progress44.com"
+     ENVIRONMENT: "DEVELOPMENT"
+     DOMAIN: "localhost"
+    depends_on:
      - db
      - php
-   links:
+    links:
      - db:mysql
      - php:php7
-   image: nginx:alpine
-   volumes: 
+    volumes: 
      - ./conf/nginx:/etc/nginx:ro
-     - ./data/www:/www:ro
+     - ./data/www:/www #making it rw so letsencrypt can configure the challenge
      - ./logs/nginx:/var/log/nginx
-   restart: always
-   ports:
+    expose: 
+     - "80"
+     - "443"
+    ports: 
      - "8880:80"
      - "8443:443"
-   networks:
+    networks:
      - int
      - ext
 
@@ -97,3 +101,6 @@ networks:
   int:
     internal: true
   ext:
+
+volumes: 
+  database-volume:

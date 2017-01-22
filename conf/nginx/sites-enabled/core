@@ -2,10 +2,11 @@
 #      GENERIC ENVIRONMENT
 #
 server {
-    listen 80;
-    server_name 127.0.0.1 localhost;
+    server_name ~^(www\.)?(?<domain>localhost|127\.0\.0\.1)$;
     root /www/7.0;
 
+    #include snippets/sslhttp2;
+    
     include snippets/common;
     
     include snippets/deny;

@@ -1,4 +1,5 @@
-FROM ubuntu:xenial
+FROM phusion/baseimage:0.9.19
+# ubuntu:xenial
 
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
@@ -39,25 +40,39 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		php-fpdf \
 		php-google-auth \
 		php-soap \
+		php-redis\
 		phpmd \
 		phploc \
 		$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*
 
+RUN set -e\
+&& { \
+	echo '[global]'; \
+	echo 'error_log = /proc/self/fd/2'; \
+	echo; \
+	echo '[www]'; \
+	echo '; if we send this to /proc/self/fd/1, it never appears'; \
+	echo 'access.log = /proc/self/fd/2'; \
+	echo; \
+	echo 'clear_env = no'; \
+	echo; \
+	echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+	echo 'catch_workers_output = yes'; \
+} | tee /etc/php/7.0/fpm/pool.d/docker.conf \
+&& { \
+	echo '[global]'; \
+	echo 'daemonize = no'; \
+	echo; \
+	echo '[www]'; \
+	echo 'listen = [::]:9000'; \
+} | tee /etc/php/7.0/fpm/pool.d/zz-docker.conf
+
 ENV PHP_INI_DIR /etc/php/7.0/fpm
 ENV PHP_VERSION 7.0
 ENV WORKDIR /www
 
-# RUN set -xe && curl -sS https://getcomposer.org/installer | php 
-# RUN set -xe && mv composer.phar /usr/local/bin/composer 
-# RUN set -xe && chmod +x /usr/local/bin/composer 
-# RUN set -xe && curl -LO https://deployer.org/deployer.phar 
-# RUN set -xe && mv deployer.phar /usr/local/bin/dep 
-# RUN set -xe && chmod +x /usr/local/bin/dep
-
 WORKDIR $WORKDIR
-
-EXPOSE 9000
 
 COPY entrypoint /usr/local/bin/
 

@@ -11,3 +11,34 @@
 	    access_log off;
 	    log_not_found off;
 	}
+
+	## Only requests to our Host are allowed i.e. nixcraft.in, images.nixcraft.in and www.nixcraft.in
+	if ($host != $domain) {
+		return 44;
+	}
+
+	## Only allow these request methods ##
+    if ($request_method !~ ^(GET|HEAD|POST|DELETE|PUT|UPDATE)$) {
+        #return 444;
+    }
+
+	## Block download agents ##
+    if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+        return 403;
+    }
+	##
+
+	## Deny certain Referers ###
+	if ($http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen)$)
+	{  
+		return 403;   
+	}
+	##
+
+	valid_referers blocked $domain;
+	if ($invalid_referer) {
+	 	rewrite ^/images/uploads.*\.(gif|jpg|jpeg|png)$ http://$domain/banned.jpg last;
+	}
+
+
+

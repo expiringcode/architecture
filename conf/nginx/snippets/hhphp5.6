@@ -4,19 +4,19 @@ location ~ \.(hh|php)$ {
     
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
     fastcgi_keep_conn on;
-    include         fastcgi_params;
+    include         snippets/fastcgi_params;
     fastcgi_index   index.php;
     fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_param   SERVER_NAME $host;
-    fastcgi_pass    legacy:9001;
+    fastcgi_pass    legacy:9000;
 }
 
 location @fallback {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
 
-    include         fastcgi_params;
+    include         snippets/fastcgi_params;
     fastcgi_index   index.php;
     fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_param   SERVER_NAME $host;
-    fastcgi_pass    legacy:9001;
+    fastcgi_pass    legacy:9000;
 }

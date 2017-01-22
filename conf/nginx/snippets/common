@@ -5,6 +5,7 @@
 ## Headers
 	add_header X-System Progress44;
 	add_header Access-Control-Allow-Origin *;
+	add_header Strict-Transport-Security "max-age=15768000" always;
 
 ## Index
 	index index.html index.htm index.php;
