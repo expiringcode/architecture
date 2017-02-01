@@ -6,6 +6,8 @@ services:
    build: ./images/php/7.0
    restart: always
    tty: true
+   depends_on:
+     - redis
    expose: 
      - "9000"
    volumes: 
@@ -19,11 +21,13 @@ services:
      - int
      - ext
 
-  # # BUILD PHP 5.6
+  # BUILD PHP 5.6
   legacy: 
    build: ./images/php/5.6
    restart: always
    tty: true
+   depends_on:
+     - redis
    expose: 
      - "9000"
    volumes: 
@@ -36,10 +40,31 @@ services:
    networks:
      - int
      - ext
+  
+  # BUILD NODEJS 
+  # use pm2 optionally
+  node: 
+   build: ./images/node
+   restart: always
+   tty: true
+   expose: 
+     - "27017"
+   volumes: 
+     - ./data/node:/app
+     #- ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
+   links:
+     - mongo
+   depends_on:
+     - mongo
+   environment:
+     PORT: "3000"
+   networks:
+     - int
+     - ext # giving it external access for eventual API calls to third parties
 
-  # # MYSQL 
+  # MYSQL 
   db:
-   image: mysql:5.7
+   image: mariadb:5.7
    volumes:
      - ./data/mysql:/var/lib/mysql
      - ./conf/mysql:/etc/mysql:ro
@@ -55,7 +80,19 @@ services:
    networks:
     - int
   
-  # # REDIS
+  # mongodb 
+  mongo:
+   image: mongo:latest
+   restart: always
+   vloumes: 
+     - .data/mongo:/data/db
+     # - .conf/mongo:/data/configdb
+   expose: 
+     - "27017"
+   networks:
+    - int
+  
+  # REDIS
   redis:
    image: redis
    expose: 
@@ -67,7 +104,24 @@ services:
    restart: always
    networks:
      - int
+  
+  # mongo-express
+  # not necessary for production envs.
+  mongoexpress:
+   image: mongo-express:latest
+   restart: always
+   depends_on: 
+     - mongo
+   expose: 
+     - "8081"
+   ports: 
+     - "8081:8081"
+   links:
+     - mongo
+   networks:
+     - int
 
+  # nginx
   proxy:
     build: ./images/nginx
     restart: always
@@ -77,15 +131,19 @@ services:
      SSLOPTS: "-w /www/7.0 -d progress44.com -d dev7.progress44.com"
      ENVIRONMENT: "DEVELOPMENT"
      DOMAIN: "localhost"
+    # volumes_from:
+    #   - data
     depends_on:
      - db
      - php
+     - node
     links:
      - db:mysql
      - php:php7
+     - mongo
     volumes: 
      - ./conf/nginx:/etc/nginx:ro
-     - ./data/www:/www #making it rw so letsencrypt can configure the challenge
+     - ./data/www:/www #making it rw so letsencrypt can set up the challenge
      - ./logs/nginx:/var/log/nginx
     expose: 
      - "80"
@@ -97,10 +155,21 @@ services:
      - int
      - ext
 
+  #####
+  # data 
+  data:
+   image: busybox:latest
+   restart: always
+   vloumes: 
+     - ./data/www:/www
+   networks:
+    - int
+  ######
+
 networks: 
   int:
     internal: true
   ext:
 
 volumes: 
-  database-volume:
+  databases:
