@@ -84,7 +84,7 @@ services:
   mongo:
    image: mongo:latest
    restart: always
-   vloumes: 
+   volumes: 
      - .data/mongo:/data/db
      # - .conf/mongo:/data/configdb
    expose: 
@@ -160,7 +160,7 @@ services:
   data:
    image: busybox:latest
    restart: always
-   vloumes: 
+   volumes: 
      - ./data/www:/www
    networks:
     - int

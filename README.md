@@ -55,6 +55,7 @@ A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick e
         * php
             - 5.6
             - 7.0
+        * node
 
 ## Next step, HHVM image
 
