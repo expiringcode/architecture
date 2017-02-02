@@ -64,7 +64,7 @@ services:
 
   # MYSQL 
   db:
-   image: mariadb:5.7
+   image: mariadb:latest
    volumes:
      - ./data/mysql:/var/lib/mysql
      - ./conf/mysql:/etc/mysql:ro
