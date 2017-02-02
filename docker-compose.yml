@@ -85,8 +85,8 @@ services:
    image: mongo:latest
    restart: always
    volumes: 
-     - .data/mongo:/data/db
-     # - .conf/mongo:/data/configdb
+     - ./data/mongo:/data/db
+     # - ./conf/mongo:/data/configdb
    expose: 
      - "27017"
    networks:
@@ -120,6 +120,7 @@ services:
      - mongo
    networks:
      - int
+     - ext
 
   # nginx
   proxy:
