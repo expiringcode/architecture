@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
   # BUILD PHP 7
@@ -21,6 +21,11 @@ services:
    networks:
      - int
      - ext
+   # healthcheck:
+   #  test: ["CMD", "curl", "-f", "http://localhost"]
+   #  interval: 1m30s
+   #  timeout: 10s
+   #  retries: 3
   
   # BUILD NODEJS 
   # use pm2 optionally
@@ -128,6 +133,11 @@ services:
     extends:
       file: volumes.yml
       service: conf
+
+volumes:
+  data:
+  logs:
+  conf:
 
 networks: 
   int:
