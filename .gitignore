@@ -6,3 +6,4 @@ logs/nginx
 logs/php
 data/redis
 data/mongo
+.DS_Store
