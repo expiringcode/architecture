@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+
+  #####
+  # Data 
+  data:
+   image: busybox:latest
+   restart: always
+   volumes: 
+     - ./data/www:/www
+     - ./data/node:/app
+     - ./data/redis:/data
+     - ./data/mongo:/data/db
+     - ./data/mysql:/var/lib/mysql
+  ######
+
+  #####
+  # Logs 
+  logs:
+   image: busybox:latest
+   restart: always
+   volumes: 
+     - ./logs/nginx:/var/log/nginx
+     - ./logs/mysql:/var/log/mysql
+     - ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
+  ######
+
+  #####
+  # Conf
+  conf:
+   image: busybox:latest
+   restart: always
+   volumes: 
+     - ./conf/nginx:/etc/nginx:ro
+     - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+     # - ./conf/mongo:/data/configdb
+     - ./conf/mysql:/etc/mysql:ro
+     - ./conf/php-7.0/php.ini:/etc/php/7.0/fpm/php.ini
+  ######
