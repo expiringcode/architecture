@@ -7,6 +7,7 @@ services:
   data:
    image: busybox:latest
    restart: always
+   tty: true
    volumes: 
      - ./data/www:/www
      - ./data/node:/app
@@ -20,6 +21,7 @@ services:
   logs:
    image: busybox:latest
    restart: always
+   tty: true
    volumes: 
      - ./logs/nginx:/var/log/nginx
      - ./logs/mysql:/var/log/mysql
@@ -31,10 +33,13 @@ services:
   conf:
    image: busybox:latest
    restart: always
+   tty: true
    volumes: 
      - ./conf/nginx:/etc/nginx:ro
      - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
      # - ./conf/mongo:/data/configdb
      - ./conf/mysql:/etc/mysql:ro
      - ./conf/php-7.0/php.ini:/etc/php/7.0/fpm/php.ini
+     - ./conf/hhvm/php.ini:/etc/hhvm/php.ini
+     - ./conf/hhvm/server.ini:/etc/hhvm/server.ini
   ######

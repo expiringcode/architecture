@@ -10,6 +10,7 @@ services:
   data:
    build: images/volumes/data
    restart: always
+   tty: true
   ######
 
   #####
@@ -17,6 +18,7 @@ services:
   logs:
    build: images/volumes/logs
    restart: always
+   tty: true
   ######
 
   #####
@@ -24,4 +26,5 @@ services:
   conf:
    build: images/volumes/conf
    restart: always
+   tty: true
   ######

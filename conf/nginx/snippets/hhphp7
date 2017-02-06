@@ -3,7 +3,7 @@ location ~ \.(hh|php)$ {
     error_page 502 = @fallback;
     fastcgi_keep_conn on;
     include         snippets/fastcgi-php.conf;
-    fastcgi_pass    php7:9000;
+    fastcgi_pass    hhvm:9000;
 }
 
 location @fallback {

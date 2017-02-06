@@ -26,6 +26,27 @@ services:
    #  interval: 1m30s
    #  timeout: 10s
    #  retries: 3
+
+  # BUILD HHVM
+  hhvm: 
+   build: ./images/hhvm
+   restart: always
+   tty: true
+   depends_on:
+     - redis
+     - db
+   expose: 
+     - "9000"
+   volumes_from:
+     - data
+     - logs
+     - conf
+   links:
+     - db:mysql
+     - redis
+   networks:
+     - int
+     - ext
   
   # BUILD NODEJS 
   # use pm2 optionally
@@ -107,9 +128,11 @@ services:
     depends_on:
      - php
      - node
+     - hhvm
     links:
      - db:mysql
      - php:php7
+     - hhvm
      - node
     expose: 
      - "80"
