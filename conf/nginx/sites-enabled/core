@@ -8,6 +8,8 @@ server {
     #include snippets/sslhttp2;
     
     include snippets/common;
+
+    #include snippets/404;
     
     include snippets/deny;
 
