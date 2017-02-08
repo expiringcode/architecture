@@ -14,7 +14,7 @@
 
 	## Only requests to our Host are allowed i.e. nixcraft.in, images.nixcraft.in and www.nixcraft.in
 	if ($host != $domain) {
-		return 44;
+		return 444;
 	}
 
 	## Only allow these request methods ##
