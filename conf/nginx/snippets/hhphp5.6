@@ -1,6 +1,10 @@
 location ~ \.(hh|php)$ {
     fastcgi_intercept_errors on;
     error_page 502 = @fallback;
+    error_page 500 = @fallback;
+    error_page 501 = @fallback;
+
+    add_header X-System HHVM;
     
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
     fastcgi_keep_conn on;
@@ -13,6 +17,8 @@ location ~ \.(hh|php)$ {
 
 location @fallback {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+    add_header X-System PHP;
 
     include         snippets/fastcgi_params;
     fastcgi_index   index.php;
