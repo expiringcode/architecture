@@ -1,7 +1,5 @@
 # Docker-webdev-env
 
-## Moved to [caffeinalab](https://github.com/caffeinalab/docker-webdev-env)
-
 A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick enabled) and MySQL - More services to be added
 
 
@@ -45,6 +43,7 @@ A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick e
         * php-7.0
         * php-5.6
         * redis
+        * hhvm
     + data
         * mysql
         * redis
@@ -59,6 +58,4 @@ A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick e
             - 5.6
             - 7.0
         * node
-
-## Next step, HHVM image
-
+        * hhvm

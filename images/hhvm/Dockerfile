@@ -17,25 +17,6 @@ RUN apt-get update \
 	libsqlite3-0 \
 	libxml2 \
 	xz-utils \
-	php7.0-mysql \
-	php7.0-curl \
-	php7.0-mbstring \
-	php7.0-gd \
-	php7.0-mysqli \
-	php7.0-xml \
-	php7.0-mcrypt \
-	php-apigen \
-	php-apigen-theme-bootstrap \
-	php-auth \
-	php-auth-http \
-	php-dompdf \
-	php-fpdf \
-	php-google-auth \
-	php-soap \
-	php-redis\
-	phpmd \
-	phploc \
-	$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*
 
 ENV WORKDIR /www

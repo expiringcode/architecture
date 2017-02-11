@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   # BUILD PHP 7
   php: 
    build: ./images/php/7.0
@@ -18,6 +19,13 @@ services:
    links:
      - db:mysql
      - redis
+   environment:
+     TZ: "Europe/Rome"
+     DEVELOPMENT: "true"
+     MYSQL_ROOT_PASSWORD: "root_password"
+     MYSQL_USER: "admin"
+     MYSQL_PASSWORD: "admin"
+     MYSQL_DATABASE: "test"
    networks:
      - ext
 
@@ -39,6 +47,13 @@ services:
    links:
      - db:mysql
      - redis
+   environment:
+     TZ: "Europe/Rome"
+     DEVELOPMENT: "true"
+     MYSQL_ROOT_PASSWORD: "root_password"
+     MYSQL_USER: "admin"
+     MYSQL_PASSWORD: "admin"
+     MYSQL_DATABASE: "test"
    networks:
      - ext
   
@@ -69,7 +84,10 @@ services:
    #restart: always
    expose: 
      - "3306"
+   ports:
+     - "8836:3306"
    environment:
+     TZ: "Europe/Rome"
      MYSQL_ROOT_PASSWORD: "root_password"
      MYSQL_USER: "admin"
      MYSQL_PASSWORD: "admin"
@@ -102,8 +120,9 @@ services:
     #restart: always
     #tty: true
     environment: 
+     TZ: "Europe/Rome"
      WORKDIR: "/www"
-     SSLOPTS: "-w /www/7.0 -d progress44.com -d dev7.progress44.com"
+     SSLOPTS: "-w /www/7.0 -d localhost -d 127.0.0.1"
      ENVIRONMENT: "DEVELOPMENT"
      DOMAIN: "localhost"
     volumes:
@@ -111,14 +130,14 @@ services:
      - logs:/var/log/nginx
      - conf:/etc/nginx:ro
     depends_on:
+     - legacy
      - php
-     - node
      - hhvm
     links:
      - db:mysql
+     - legacy:legacy
      - php:php7
      - hhvm
-     - node
     expose: 
      - "80"
      - "443"
