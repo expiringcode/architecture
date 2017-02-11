@@ -1,79 +1,72 @@
-version: '2.1'
+version: '3'
 
 services:
   # BUILD PHP 7
   php: 
    build: ./images/php/7.0
-   restart: always
-   tty: true
+   #restart: always
+   #tty: true
    depends_on:
      - redis
      - db
    expose: 
      - "9000"
-   volumes_from:
-     - data
-     - logs
-     - conf
+   volumes:
+     - data:/www
+     - logs:/var/log/php7.0-fpm.log
+     - conf:/etc/php/7.0/fpm/php.ini
    links:
      - db:mysql
      - redis
    networks:
-     - int
      - ext
-   # healthcheck:
-   #  test: ["CMD", "curl", "-f", "http://localhost"]
-   #  interval: 1m30s
-   #  timeout: 10s
-   #  retries: 3
 
   # BUILD HHVM
   hhvm: 
    build: ./images/hhvm
-   restart: always
-   tty: true
+   #restart: always
+   #tty: true
    depends_on:
      - redis
      - db
    expose: 
      - "9000"
-   volumes_from:
-     - data
-     - logs
-     - conf
+   volumes:
+     - data:/www
+     - logs:/var/log/php7.0-fpm.log
+     - conf:/etc/hhvm/php.ini
+     - conf:/etc/hhvm/server.ini
    links:
      - db:mysql
      - redis
    networks:
-     - int
      - ext
   
   # BUILD NODEJS 
   # use pm2 optionally
   node: 
    build: ./images/node
-   restart: always
-   tty: true
+   #restart: always
+   #tty: true
    expose: 
      - "27017"
-   volumes_from:
-     - data
+   volumes:
+     - data:/app
    depends_on:
      - mongo
    environment:
      PORT: "3000"
    networks:
-     - int
      - ext # giving it external access for eventual API calls to third parties
 
   # MYSQL 
   db:
    image: mysql:5.7
-   volumes_from:
-     - data
-     - logs
-     - conf
-   restart: always
+   volumes:
+     - data:/var/lib/mysql
+     - logs:/var/log/mysql
+     - conf:/etc/mysql:ro
+   #restart: always
    expose: 
      - "3306"
    environment:
@@ -81,50 +74,42 @@ services:
      MYSQL_USER: "admin"
      MYSQL_PASSWORD: "admin"
      MYSQL_DATABASE: "test"
-   networks:
-    - int
   
   # mongodb 
   mongo:
    image: mongo:latest
-   restart: always
-   volumes_from:
-     - data
-     - logs
-     - conf
+   #restart: always
+   volumes:
+     - data:/data/db
+     #- conf:/data/configdb
    expose: 
      - "27017"
-   networks:
-     - int
   
   # REDIS
   redis:
    image: redis
-   volumes_from:
-     - data
-     - logs
-     - conf
+   volumes:
+     - data:/data
+     - conf:/usr/local/etc/redis/redis.conf
    expose: 
      - "6379"
    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-   restart: always
-   networks:
-     - int
+   #restart: always
 
   # nginx
   proxy:
     build: ./images/nginx
-    restart: always
-    tty: true
+    #restart: always
+    #tty: true
     environment: 
      WORKDIR: "/www"
      SSLOPTS: "-w /www/7.0 -d progress44.com -d dev7.progress44.com"
      ENVIRONMENT: "DEVELOPMENT"
      DOMAIN: "localhost"
-    volumes_from:
-     - data
-     - logs
-     - conf
+    volumes:
+     - data:/www
+     - logs:/var/log/nginx
+     - conf:/etc/nginx:ro
     depends_on:
      - php
      - node
@@ -141,21 +126,7 @@ services:
      - "8880:80"
      - "8443:443"
     networks:
-     - int
      - ext
-
-  data:
-    extends:
-      file: volumes.yml
-      service: data
-  logs:
-    extends:
-      file: volumes.yml
-      service: logs
-  conf:
-    extends:
-      file: volumes.yml
-      service: conf
 
 volumes:
   data:
@@ -163,6 +134,4 @@ volumes:
   conf:
 
 networks: 
-  int:
-    internal: true
   ext:
