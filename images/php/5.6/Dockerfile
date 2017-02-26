@@ -2,15 +2,15 @@ FROM phusion/baseimage:0.9.19
 # ubuntu:xenial
 
 # persistent / runtime deps
-ENV PHPIZE_DEPS \
-		autoconf \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkg-config \
-		re2c
+# ENV PHPIZE_DEPS \
+# 		autoconf \
+# 		file \
+# 		g++ \
+# 		gcc \
+# 		libc-dev \
+# 		make \
+# 		pkg-config \
+# 		re2c
 
 ENV PHP_MODS \
 	imagemagick \
@@ -21,10 +21,10 @@ RUN apt-get update \
 	&& add-apt-repository ppa:ondrej/php \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --allow-unauthenticated \
-		$PHPIZE_DEPS \
+		# $PHPIZE_DEPS \
 		ca-certificates \
 		curl \
-		libedit2 \
+		# libedit2 \
 		libsqlite3-0 \
 		libxml2 \
 		xz-utils \
@@ -38,6 +38,9 @@ RUN apt-get update \
 		php5.6-mcrypt \
 		php-fpdf \
 		php5.6-soap \
+		php5.6-redis \
+		zip \
+		git \
 		$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*
 

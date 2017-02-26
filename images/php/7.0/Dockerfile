@@ -1,24 +1,24 @@
 FROM phusion/baseimage:0.9.19
 
-ENV PHPIZE_DEPS \
-		autoconf \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkg-config \
-		re2c
+# ENV PHPIZE_DEPS \
+# 		autoconf \
+# 		file \
+# 		g++ \
+# 		gcc \
+# 		libc-dev \
+# 		make \
+# 		pkg-config \
+# 		re2c
 
 ENV PHP_MODS \
 	imagemagick \
 	php-imagick
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		$PHPIZE_DEPS \
-		ca-certificates \
+		# $PHPIZE_DEPS \
+		# ca-certificates \
 		curl \
-		libedit2 \
+		# libedit2 \
 		libsqlite3-0 \
 		libxml2 \
 		xz-utils \
@@ -41,6 +41,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		php-redis\
 		phpmd \
 		phploc \
+		zip \
+		git \
 		$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*
 

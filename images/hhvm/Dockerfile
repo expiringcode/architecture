@@ -13,10 +13,12 @@ RUN apt-get update \
 	&& apt-get install -y --no-install-recommends hhvm \
 	ca-certificates \
 	curl \
-	libedit2 \
+	# libedit2 \
 	libsqlite3-0 \
 	libxml2 \
 	xz-utils \
+	zip \
+	git \
 	&& rm -r /var/lib/apt/lists/*
 
 ENV WORKDIR /www
