@@ -3,11 +3,9 @@ version: '2.1'
 services:
 
   #####
-  # Data 
+  # Data
   data:
    image: busybox:latest
-   restart: always
-   tty: true
    volumes: 
      - ./data/www:/www
      - ./data/node:/app
@@ -21,8 +19,6 @@ services:
   # Logs 
   logs:
    image: busybox:latest
-   restart: always
-   tty: true
    volumes: 
      - ./logs/nginx:/var/log/nginx
      - ./logs/mysql:/var/log/mysql
@@ -34,8 +30,6 @@ services:
   # Conf
   conf:
    image: busybox:latest
-   restart: always
-   tty: true
    volumes: 
      - ./conf/nginx:/etc/nginx:ro
      - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf

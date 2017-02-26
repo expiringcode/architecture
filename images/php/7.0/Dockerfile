@@ -84,4 +84,4 @@ WORKDIR $WORKDIR
 
 COPY entrypoint /usr/local/bin/
 
-#CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a
+CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a
