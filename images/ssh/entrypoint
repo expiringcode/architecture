@@ -11,10 +11,10 @@ _datadir() {
 	"$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }'
 }
 
-echo "$SSH_USERNAME" "$SSH_PASSWORD"
+echo "Connect to ssh authenticating with $SSH_USERNAME:$SSH_PASSWORD"
 
-if [ -z "$SSH_USERNAME" -a -z "$SSH_PASSWORD" ]; then
-	echo '$SSH_USERNAME:$SSH_PASSWORD' | chpasswd
+if [ -n "$SSH_USERNAME" -a -n "$SSH_PASSWORD" ]; then
+	echo "$SSH_USERNAME:$SSH_PASSWORD" | chpasswd
 fi
 
 exec "$@"
