@@ -38,10 +38,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		php-fpdf \
 		php-google-auth \
 		php-soap \
-		php-redis\
+		php-redis \
+		php-zip \
 		phpmd \
 		phploc \
 		zip \
+		unzip \
 		git \
 		$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*

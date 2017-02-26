@@ -18,6 +18,7 @@ RUN apt-get update \
 	libxml2 \
 	xz-utils \
 	zip \
+	unzip \
 	git \
 	&& rm -r /var/lib/apt/lists/*
 

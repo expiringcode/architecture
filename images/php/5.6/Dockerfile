@@ -39,7 +39,9 @@ RUN apt-get update \
 		php-fpdf \
 		php5.6-soap \
 		php5.6-redis \
+		php5.6-zip \
 		zip \
+		unzip \
 		git \
 		$PHP_MODS \
 	&& rm -r /var/lib/apt/lists/*
