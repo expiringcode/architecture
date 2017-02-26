@@ -7,4 +7,12 @@ if [ "${1#-}" != "$1" ]; then
 	set -- php "$@"
 fi
 
+
+if [ -n "$PROJECT_GIT_HTTPS" -a -z "$(ls -A $WORKDIR)" ]; then
+	cd $WORKDIR
+	git clone $PROJECT_GIT_HTTPS
+	composer install
+	mv .env.example .env
+fi
+
 exec "$@"
