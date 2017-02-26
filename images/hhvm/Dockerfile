@@ -23,6 +23,9 @@ ENV WORKDIR /www
 
 WORKDIR $WORKDIR
 
+RUN rm -Rf /etc/hhvm/php.ini && rm -Rf /etc/hhvm/server.ini
+COPY ./conf/* /etc/hhvm/
+
 COPY entrypoint /usr/local/bin/
 
 CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a

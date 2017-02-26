@@ -41,6 +41,9 @@ COPY iptables.sh /usr/bin
 COPY entrypoint /usr/bin
 RUN chmod +x /usr/bin/entrypoint
 
+RUN rm -Rf /etc/nginx
+COPY ./conf /etc/nginx
+
 WORKDIR $WORKDIR
 
 CMD entrypoint && service nginx start && /bin/sh

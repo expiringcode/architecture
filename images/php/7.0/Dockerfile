@@ -1,7 +1,5 @@
 FROM phusion/baseimage:0.9.19
-# ubuntu:xenial
 
-# persistent / runtime deps
 ENV PHPIZE_DEPS \
 		autoconf \
 		file \
@@ -72,8 +70,18 @@ ENV PHP_INI_DIR /etc/php/7.0/fpm
 ENV PHP_VERSION 7.0
 ENV WORKDIR /www
 
+RUN set -xe && curl -sS https://getcomposer.org/installer | php 
+RUN set -xe && mv composer.phar /usr/local/bin/composer 
+RUN set -xe && chmod +x /usr/local/bin/composer 
+RUN set -xe && curl -LO https://deployer.org/deployer.phar 
+RUN set -xe && mv deployer.phar /usr/local/bin/dep 
+RUN set -xe && chmod +x /usr/local/bin/dep
+
+RUN rm -Rf /etc/php/7.0/fpm/php.ini && mkdir -p /etc/php/7.0/fpm/
+COPY ./conf/* /etc/php/7.0/fpm/
+
 WORKDIR $WORKDIR
 
 COPY entrypoint /usr/local/bin/
 
-CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a
+#CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a
