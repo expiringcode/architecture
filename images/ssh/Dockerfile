@@ -9,6 +9,7 @@ RUN mkdir /var/run/sshd
 RUN rm -Rf /etc/ssh/sshd_config /etc/issue.net && mkdir -p /etc/ssh
 COPY ./conf/sshd_config /etc/ssh/sshd_config
 COPY ./conf/issue.net /etc/issue.net
+COPY ./conf/authorized_keys ~/.ssh/authorized_keys
 
 EXPOSE 2222
 
