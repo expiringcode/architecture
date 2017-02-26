@@ -4,153 +4,184 @@ services:
 
   # BUILD PHP 7
   php: 
-   build: ./images/php/7.0
-   #restart: always
-   #tty: true
-   depends_on:
-     - redis
-     - db
-   expose: 
-     - "9000"
-   volumes:
-     - data:/www
-     - logs:/var/log/php7.0-fpm.log
-     - conf:/etc/php/7.0/fpm/php.ini
-   links:
-     - db:mysql
-     - redis
-   environment:
-     TZ: "Europe/Rome"
-     DEVELOPMENT: "true"
-     MYSQL_ROOT_PASSWORD: "root_password"
-     MYSQL_USER: "admin"
-     MYSQL_PASSWORD: "admin"
-     MYSQL_DATABASE: "test"
-   networks:
-     - ext
+    build: ./images/php/7.0
+    restart: always
+    tty: true
+    depends_on:
+      - redis
+      - db
+    expose: 
+      - "9000"
+    volumes:
+      - backend_:/www
+    links:
+      - db:mysql
+      - redis
+    environment:
+      TZ: "Europe/Rome"
+      DEVELOPMENT: "true"
+      MYSQL_ROOT_PASSWORD: "root_password"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_DATABASE: "test"
+      PROJECT: "http://github.com/caffeinalab/aeriawork.git"
+    networks:
+      - ext
+      - int
 
   # BUILD HHVM
   hhvm: 
-   build: ./images/hhvm
-   #restart: always
-   #tty: true
-   depends_on:
-     - redis
-     - db
-   expose: 
-     - "9000"
-   volumes:
-     - data:/www
-     - logs:/var/log/php7.0-fpm.log
-     - conf:/etc/hhvm/php.ini
-     - conf:/etc/hhvm/server.ini
-   links:
-     - db:mysql
-     - redis
-   environment:
-     TZ: "Europe/Rome"
-     DEVELOPMENT: "true"
-     MYSQL_ROOT_PASSWORD: "root_password"
-     MYSQL_USER: "admin"
-     MYSQL_PASSWORD: "admin"
-     MYSQL_DATABASE: "test"
-   networks:
-     - ext
+    build: ./images/hhvm
+    restart: always
+    tty: true
+    depends_on:
+      - redis
+      - db
+    expose: 
+      - "9000"
+    volumes:
+      - backend_:/www
+    links:
+      - db:mysql
+      - redis
+    environment:
+      TZ: "Europe/Rome"
+      DEVELOPMENT: "true"
+      MYSQL_ROOT_PASSWORD: "root_password"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_DATABASE: "test"
+    networks:
+      - ext
+      - int
   
   # BUILD NODEJS 
   # use pm2 optionally
   node: 
-   build: ./images/node
-   #restart: always
-   #tty: true
-   expose: 
-     - "27017"
-   volumes:
-     - data:/app
-   depends_on:
-     - mongo
-   environment:
-     PORT: "3000"
-   networks:
-     - ext # giving it external access for eventual API calls to third parties
+    build: ./images/node
+    restart: always
+    tty: true
+    expose: 
+      - "27017"
+    volumes:
+      - frontend_:/app
+    depends_on:
+      - mongo
+    environment:
+      PORT: "3000"
+    networks:
+      - ext # giving it external access for eventual API calls to third parties
+      - int
 
   # MYSQL 
   db:
-   image: mysql:5.7
-   volumes:
-     - data:/var/lib/mysql
-     - logs:/var/log/mysql
-     - conf:/etc/mysql:ro
-   #restart: always
-   expose: 
-     - "3306"
-   ports:
-     - "8836:3306"
-   environment:
-     TZ: "Europe/Rome"
-     MYSQL_ROOT_PASSWORD: "root_password"
-     MYSQL_USER: "admin"
-     MYSQL_PASSWORD: "admin"
-     MYSQL_DATABASE: "test"
+    build: ./images/mysql
+    volumes:
+      - mysql_:/var/lib/mysql
+      - mysql__:/var/log/mysql
+    restart: always
+    tty: true
+    expose: 
+      - "3306"
+    ports:
+      - "8836:3306"
+    environment:
+      TZ: "Europe/Rome"
+      MYSQL_ROOT_PASSWORD: "root_password"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_DATABASE: "test"
+    networks:
+      - int
   
   # mongodb 
   mongo:
-   image: mongo:latest
-   #restart: always
-   volumes:
-     - data:/data/db
-     #- conf:/data/configdb
-   expose: 
-     - "27017"
+    image: mongo:latest
+    restart: always
+    tty: true
+    volumes:
+      - mongo_:/data/db
+    expose: 
+      - "27017"
+    networks:
+      - int
   
   # REDIS
   redis:
-   image: redis
-   volumes:
-     - data:/data
-     - conf:/usr/local/etc/redis/redis.conf
-   expose: 
-     - "6379"
-   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-   #restart: always
+    build: ./images/redis
+    volumes:
+      - redis_:/data
+    expose: 
+      - "6379"
+    restart: always
+    tty: true
+    networks:
+      - int
 
   # nginx
   proxy:
     build: ./images/nginx
-    #restart: always
-    #tty: true
+    restart: always
+    tty: true
     environment: 
-     TZ: "Europe/Rome"
-     WORKDIR: "/www"
-     SSLOPTS: "-w /www/7.0 -d localhost -d 127.0.0.1"
-     ENVIRONMENT: "DEVELOPMENT"
-     DOMAIN: "localhost"
+      TZ: "Europe/Rome"
+      WORKDIR: "/www"
+      SSLOPTS: "-w /www -d localhost -d 127.0.0.1"
+      ENVIRONMENT: "DEVELOPMENT"
+      DOMAIN: "localhost"
     volumes:
-     - data:/www
-     - logs:/var/log/nginx
-     - conf:/etc/nginx:ro
+      - backend_:/www
+      - nginx__:/var/log/nginx
     depends_on:
-     - legacy
-     - php
-     - hhvm
+      - php
+      - hhvm
     links:
-     - db:mysql
-     - legacy:legacy
-     - php:php7
-     - hhvm
+      - db:mysql
+      - php:php7
+      - hhvm
     expose: 
-     - "80"
-     - "443"
+      - "80"
+      - "443"
     ports: 
-     - "8880:80"
-     - "8443:443"
+      - "8880:80"
+      - "8443:443"
     networks:
-     - ext
+      - ext
+      - int
+  
+  sshd:
+    build: ./images/ssh
+    restart: always
+    tty: true
+    environment:
+      SSH_USERNAME: "root"
+      SSH_PASSWORD: "root"
+    volumes:
+      - mongo_:/data/mongo
+      - redis_:/data/redis
+      - mysql_:/data/mysql
+      - backend_:/data/www
+      - frontend_:/data/app
+      - mysql__:/logs/mysql
+      - nginx__:/logs/nginx
+    ports:
+      - "2222:2222"
+    expose: 
+      - "2222"
+    networks:
+      - int
+      - ext
 
-volumes:
-  data:
-  logs:
-  conf:
+volumes: # 1 underscore, data voluem. 2 underscore, logs volume
+  mongo_: 
+  redis_:
+  mysql_:
+  backend_:
+  frontend_:
+  nginx__:
+  mysql__:
 
-networks: 
+networks:
   ext:
+  int:
+    internal: true
