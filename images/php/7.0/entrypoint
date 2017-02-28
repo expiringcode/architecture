@@ -10,9 +10,7 @@ fi
 
 if [ -n "$PROJECT_GIT_HTTPS" -a -z "$(ls -A $WORKDIR)" ]; then
 	cd $WORKDIR
-	git clone $PROJECT_GIT_HTTPS
-	composer install
-	mv .env.example .env
+	composer create-project aeria/work aeriawork
 fi
 
 exec "$@"

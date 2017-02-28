@@ -3,7 +3,7 @@
 #
 server {
     server_name ~^(www\.)?(?<domain>localhost|127\.0\.0\.1)$;
-    root /www/aeriawork;
+    root /www/aeriawork/public;
 
     #include snippets/sslhttp2;
     
