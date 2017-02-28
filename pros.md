@@ -61,9 +61,9 @@ The rapid adaptation of Docker (and similar container technologies) increases op
 
 Three easy fixes (we go into these in more detail later):
 
-**Drop privileges as quickly as possible.**
-**Run your services as a non-root user when possible.**
-**Treat root inside the container as if it runs outside the container.**
+- **Drop privileges as quickly as possible.**
+- **Run your services as a non-root user when possible.**
+- **Treat root inside the container as if it runs outside the container.**
 
 [More on docker](https://www.docker.com/what-docker)
 
