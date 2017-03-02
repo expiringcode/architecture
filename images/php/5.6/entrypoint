@@ -1,11 +1,25 @@
 #!/bin/sh
 set -e
-
 service php5.6-fpm start
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- php "$@"
 fi
+
+cd $WORKDIR
+
+	composer create-project aeria/work $PROJECT_NAME
+
+	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME/server)" ]
+	then
+		ln -sf $WORKDIR/nginx/$PROJECT_NAME $WORKDIR/$PROJECT_NAME/server/
+	fi
+
+	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME/nginx)" ]
+	then
+		ln -sf $WORKDIR/nginx/$PROJECT_NAME $WORKDIR/$PROJECT_NAME/nginx/
+	fi
+
 
 exec "$@"
