@@ -19,60 +19,23 @@ services:
       - redis
     environment:
       TZ: "Europe/Rome"
-      DEVELOPMENT: "true"
+      DOCKER: "1"
+      DEVELOPMENT: "-1" # -1 because system should work the same in development and production
       MYSQL_ROOT_PASSWORD: "root_password"
-      MYSQL_USER: "admin"
-      MYSQL_PASSWORD: "admin"
-      MYSQL_DATABASE: "test"
-      SSH_USERNAME: ""
-      SSH_PASSWORD: ""
+      DB_HOST: "mysql"
+      DB_NAME: "test"
+      DB_USER: "root"
+      DB_PASS: ""
+      WP_USE_THEMES: "false"
+      WP_LANG: "it_IT"
+      WP_POST_REVISIONS: "false"
       PROJECT_NAME: "test"
+      APP_ID: "aeriawork"
+      ENV: "local"
+      HTTP_HOST: "localhost"
+      PUBLIC_URL: "http://aeriawork.vanadio.dev"
     networks:
       - ext
-      - int
-
-  # BUILD HHVM
-  hhvm: 
-    build: ./images/hhvm
-    restart: always
-    tty: true
-    depends_on:
-      - redis
-      - db
-    expose: 
-      - "9000"
-    volumes:
-      - backend_:/www
-    links:
-      - db:mysql
-      - redis
-    environment:
-      TZ: "Europe/Rome"
-      DEVELOPMENT: "true"
-      MYSQL_ROOT_PASSWORD: "root_password"
-      MYSQL_USER: "admin"
-      MYSQL_PASSWORD: "admin"
-      MYSQL_DATABASE: "test"
-    networks:
-      - ext
-      - int
-  
-  # BUILD NODEJS 
-  # use pm2 optionally
-  node: 
-    build: ./images/node
-    restart: always
-    tty: true
-    expose: 
-      - "27017"
-    volumes:
-      - frontend_:/app
-    depends_on:
-      - mongo
-    environment:
-      PORT: "3000"
-    networks:
-      - ext # giving it external access for eventual API calls to third parties
       - int
 
   # MYSQL 
@@ -93,18 +56,6 @@ services:
       MYSQL_USER: "admin"
       MYSQL_PASSWORD: "admin"
       MYSQL_DATABASE: "test"
-    networks:
-      - int
-  
-  # mongodb 
-  mongo:
-    image: mongo:latest
-    restart: always
-    tty: true
-    volumes:
-      - mongo_:/data/db
-    expose: 
-      - "27017"
     networks:
       - int
   
@@ -136,11 +87,9 @@ services:
       - nginx__:/var/log/nginx
     depends_on:
       - php
-      - hhvm
     links:
       - db:mysql
       - php:php7
-      - hhvm
     expose: 
       - "80"
       - "443"
@@ -150,29 +99,6 @@ services:
     networks:
       - ext
       - int
-  
-  sshd:
-    build: ./images/ssh
-    restart: always
-    tty: true
-    environment:
-      SSH_USERNAME: "root"
-      SSH_PASSWORD: "root"
-    volumes:
-      - mongo_:/data/mongo
-      - redis_:/data/redis
-      - mysql_:/data/mysql
-      - backend_:/data/www
-      - frontend_:/data/app
-      - mysql__:/logs/mysql
-      - nginx__:/logs/nginx
-    ports:
-      - "2222:2222"
-    expose: 
-      - "2222"
-    networks:
-      - int
-      - ext
 
 volumes: # 1 underscore, data voluem. 2 underscore, logs volume
   mongo_: 
