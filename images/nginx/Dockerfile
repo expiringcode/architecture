@@ -34,6 +34,8 @@ RUN rm -r /var/lib/apt/lists/*
 
 ENV WORKDIR /www
 
+RUN mkdir -p $WORKDIR/nginx
+
 COPY sysctl.conf /etc/sysctl.conf
 COPY iptables.sh /usr/bin
 # can't run iptables because the system doesn't have some programs such as ifconfig or iptables
