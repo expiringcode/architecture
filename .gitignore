@@ -1,9 +1,1 @@
-sites-available/
-data/mysql
-data/www
-logs/mysql
-logs/nginx
-logs/php
-data/redis
-data/mongo
 .DS_Store
