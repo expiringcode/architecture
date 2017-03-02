@@ -7,19 +7,20 @@ if [ "${1#-}" != "$1" ]; then
 	set -- php "$@"
 fi
 
-cd $WORKDIR
+if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
+	cd $WORKDIR
 
 	composer create-project aeria/work $PROJECT_NAME
 
-	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME/server)" ]
+	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep server)" ]
 	then
 		ln -sf $WORKDIR/nginx/$PROJECT_NAME $WORKDIR/$PROJECT_NAME/server/
 	fi
 
-	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME/nginx)" ]
+	if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep nginx)" ]
 	then
 		ln -sf $WORKDIR/nginx/$PROJECT_NAME $WORKDIR/$PROJECT_NAME/nginx/
 	fi
-
+fi
 
 exec "$@"
