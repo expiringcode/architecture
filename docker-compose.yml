@@ -26,7 +26,7 @@ services:
       MYSQL_DATABASE: "test"
       SSH_USERNAME: ""
       SSH_PASSWORD: ""
-      PROJECT_GIT_HTTPS: "http://github.com/caffeinalab/aeriawork.git"
+      PROJECT_NAME: "test"
     networks:
       - ext
       - int

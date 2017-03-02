@@ -8,9 +8,17 @@ if [ "${1#-}" != "$1" ]; then
 fi
 
 
-if [ -n "$PROJECT_GIT_HTTPS" -a -z "$(ls -A $WORKDIR)" ]; then
+if [ -z "$(ls -A $WORKDIR/$PROJECT_NAME)" ]; then
 	cd $WORKDIR
-	composer create-project aeria/work aeriawork
+
+	composer create-project aeria/work $PROJECT_NAME
+	# /server
+
+	# ln -sf $WORKDIR/nginx/ $WORKDIR/$PROJECT_NAME/server/*
+	ln -sf $WORKDIR/nginx/$PROJECT_NAME $WORKDIR/$PROJECT_NAME/server/
+
+	echo "something" > $WORKDIR/$PROJECT_NAME/server/error.conf
+
 fi
 
 exec "$@"
