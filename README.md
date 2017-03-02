@@ -1,6 +1,6 @@
-# Docker-webdev-env
+# AeriaContainer
 
-A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick enabled) and MySQL - More services to be added
+A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with imagick enabled php-md and other modules) and MySQL - More services to be added
 
 
 ## Services installation and configuration
@@ -15,7 +15,7 @@ A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick e
             - `WORKDIR` to be set to */www*
             - `SSLOPTS` to be set to `*-w /www/7.0 -d localhost -d 127.0.0.1*`
             - The above environment variable is needed for letsencrypt certificate generation
-            - **Letsencrypt** certificates are renewed automatically by a cronjob
+            - **Letsencrypt** certificates are renewed automatically by a cronjob **Not tested yet**
         * **PHP** *`php`7.0 service with imagemagick and redis enabled* **built image**
             - php-imagick
             - php-redis
@@ -37,25 +37,49 @@ A preconfigured docker environment with NGINX, PHP7, PHP5.6 (both with imagick e
 ## File structure
 
 - Project
-    + conf
-        * mysql
-        * nginx
-        * php-7.0
-        * php-5.6
-        * redis
-        * hhvm
-    + data
-        * mysql
-        * redis
-        * www *PHP website goes here*
-    + logs
-        * mysql
-        * nginx
-        * php
     + images
         * nginx
+            - conf
+        * hhvm
+            - conf
         * php
             - 5.6
+                + conf
             - 7.0
+                + conf
         * node
-        * hhvm
+        * mysql
+            - conf
+        * redis
+            - conf
+        * ssh
+            - conf
+
+## Files saved persistently
+
+### configuration files:
+
+- ./conf/nginx:/etc/nginx:ro
+- ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+- ./conf/mongo:/data/configdb
+- ./conf/mysql:/etc/mysql:ro
+- ./conf/php-7.0/php.ini:/etc/php/7.0/fpm/php.ini
+- ./conf/php-5.6/php.ini:/etc/php/5.6/fpm/php.ini
+- ./conf/hhvm/php.ini:/etc/hhvm/php.ini
+- ./conf/hhvm/server.ini:/etc/hhvm/server.ini
+
+### logs:
+
+- ./logs/nginx:/var/log/nginx
+- ./logs/mysql:/var/log/mysql
+- ./logs/php/php7.0-fpm.log:/var/log/php7.0-fpm.log
+- ./logs/php/php5.6-fpm.log:/var/log/php5.6-fpm.log
+
+### data:
+
+- ./data/www:/www
+- ./data/node:/app
+- ./data/redis:/data
+- ./data/mongo:/data/db
+- ./data/mysql:/var/lib/mysql
+
