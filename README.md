@@ -59,27 +59,27 @@ A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with ima
 
 ### configuration files:
 
-- -./conf/nginx:-/etc/nginx:ro
-- -./conf/redis/redis.conf:-/usr/local/etc/redis/redis.conf
-- -./conf/mongo:-/data/configdb
-- -./conf/mysql:-/etc/mysql:ro
-- -./conf/php-7.0/php.ini:-/etc/php/7.0/fpm/php.ini
-- -./conf/php-5.6/php.ini:-/etc/php/5.6/fpm/php.ini
-- -./conf/hhvm/php.ini:-/etc/hhvm/php.ini
-- -./conf/hhvm/server.ini:-/etc/hhvm/server.ini
+- _./conf/nginx:_/etc/nginx:ro
+- _./conf/redis/redis.conf:_/usr/local/etc/redis/redis.conf
+- _./conf/mongo:_/data/configdb
+- _./conf/mysql:_/etc/mysql:ro
+- _./conf/php-7.0/php.ini:_/etc/php/7.0/fpm/php.ini
+- _./conf/php-5.6/php.ini:_/etc/php/5.6/fpm/php.ini
+- _./conf/hhvm/php.ini:_/etc/hhvm/php.ini
+- _./conf/hhvm/server.ini:_/etc/hhvm/server.ini
 
 ### logs:
 
-- -./logs/nginx:-/var/log/nginx
-- -./logs/mysql:-/var/log/mysql
-- -./logs/php/php7.0-fpm.log:-/var/log/php7.0-fpm.log
-- -./logs/php/php5.6-fpm.log:-/var/log/php5.6-fpm.log
+- _./logs/nginx:_/var/log/nginx
+- _./logs/mysql:_/var/log/mysql
+- _./logs/php/php7.0-fpm.log:_/var/log/php7.0-fpm.log
+- _./logs/php/php5.6-fpm.log:_/var/log/php5.6-fpm.log
 
 ### data:
 
-- -./data/www:-/www
-- -./data/node:-/app
-- -./data/redis:-/data
-- -./data/mongo:-/data/db
-- -./data/mysql:-/var/lib/mysql
+- _./data/www:_/www
+- _./data/node:_/app
+- _./data/redis:_/data
+- _./data/mongo:_/data/db
+- _./data/mysql:_/var/lib/mysql
 
