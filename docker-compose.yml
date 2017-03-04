@@ -53,7 +53,7 @@ services:
       - int
 
   # nginx
-  proxy:
+  nginx:
     build: ./images/nginx
     restart: always
     tty: true
@@ -74,6 +74,26 @@ services:
       - "$PROXY_HTTP:80"
       - "$PROXY_HTTPS:443"
     networks:
+      - int
+
+  # haproxy loadbalancer
+  haproxy:
+    build: ./images/haproxy
+    restart: always
+    tty: true
+    env_file: 
+      - ./images/nginx/proxy.env
+    volumes:
+      - proxy__:/var/log/nginx
+    depends_on:
+      - nginx
+    expose: 
+      - "80"
+      - "443"
+    ports: 
+      - "$PROXY_HTTP:80"
+      - "$PROXY_HTTPS:443"
+    networks:
       - ext
       - int
 
@@ -85,6 +105,7 @@ volumes: # 1 underscore, data voluem. 2 underscore, logs volume
   frontend_:
   nginx__:
   mysql__:
+  proxy__:
 
 networks:
   ext:

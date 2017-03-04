@@ -2,10 +2,10 @@ set -e
 
 nginx -t
 
-if [ "$ENVIRONMENT" = "PRODUCTION" ]; then
-	if [ -n "$SSLOPTS" ]; then
-		`echo "letsencrypt certonly --webroot $SSLOPTS"`;
-	fi
-fi
+## Monitor directory changes to reload nginx with new directives
 
-exec "$@"
+cd $WORKDIR/nginx/
+onchange service nginx reload
+
+# obsolete
+# exec "$@"

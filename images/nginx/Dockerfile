@@ -5,6 +5,7 @@ FROM phusion/baseimage:0.9.19
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	nginx\
 	wget\
+	inotify-tools\
 	# selinux-policy-ubuntu\ # can't be installed because it requires GRUB-common
 	# selinux-policy-dev\
 	# libselinux1-dev\
@@ -18,18 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 	&& /usr/sbin/semodule -i nginx.pp\
 # 	&& echo "Made nginx.pp selinux policy but can't install becuase missing selinux-policy"
 
-## Installing letsencrypt
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	letsencrypt\
-	&& mkdir -p /ssl\
-	&& openssl dhparam -out /ssl/dhparam.pem 2048
-RUN (crontab -l ; echo "30 03 01 */3 * letsencrypt renew")| crontab -
-
-RUN mkdir -p /etc/letsencrypt/live/$DOMAIN
-COPY privkey.pem /etc/letsencrypt/live/$DOMAIN
-COPY fullchain.pem /etc/letsencrypt/live/$DOMAIN
-
 ## Clean apt list
+RUN apt-get autoremove -y
 RUN rm -r /var/lib/apt/lists/*
 
 ENV WORKDIR /www
@@ -42,6 +33,9 @@ COPY iptables.sh /usr/bin
 
 COPY entrypoint /usr/bin
 RUN chmod +x /usr/bin/entrypoint
+
+COPY onchange.sh /usr/bin/onchange
+RUN chmod a+rx /usr/bin/onchange
 
 RUN rm -Rf /etc/nginx
 COPY ./conf /etc/nginx
