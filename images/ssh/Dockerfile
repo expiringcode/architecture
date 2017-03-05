@@ -1,10 +1,10 @@
-FROM ubuntu:latest
+FROM phusion/baseimage:0.9.19
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	openssh-client\
 	openssh-server
 
-RUN mkdir /var/run/sshd
+RUN mkdir -p /var/run/sshd
 
 RUN rm -Rf /etc/ssh/sshd_config /etc/issue.net && mkdir -p /etc/ssh
 COPY ./conf/sshd_config /etc/ssh/sshd_config

@@ -24,6 +24,29 @@ services:
     networks:
       - ext
       - int
+    healthcheck:
+      test: sh
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      mode: replicated
+      replicas: 6
+      update_config:
+        parallelism: 2
+        delay: 10s
+        failure_action: pause
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+        reservations:
+          cpus: '0.0001'
+          memory: 200M
 
   # MYSQL 
   db:
@@ -41,6 +64,24 @@ services:
       - ./images/mysql/db.env
     networks:
       - int
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: pause
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '0'
+          memory: 1.5G
+        reservations:
+          cpus: '0.0001'
+          memory: 1G
   
   # REDIS
   redis:
@@ -55,6 +96,19 @@ services:
     tty: true
     networks:
       - int
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 1G
+        reservations:
+          cpus: '0.0001'
+          memory: 1G
 
   # nginx
   nginx:
@@ -82,6 +136,29 @@ services:
     networks:
       - int
       - main
+    healthcheck:
+      test: sh
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: pause
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 200M
+        reservations:
+          cpus: '0.0001'
+          memory: 200M
 
 volumes: # 1 underscore, data voluem. 2 underscore, logs volume
   mongo_: 

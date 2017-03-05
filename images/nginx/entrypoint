@@ -4,8 +4,7 @@ nginx -t
 
 ## Monitor directory changes to reload nginx with new directives
 
-cd $WORKDIR/nginx/
-onchange service nginx reload
+service nginx start
 
-# obsolete
-# exec "$@"
+cd $WORKDIR/nginx/
+onchange service nginx reload && "$@"
