@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  
+  php:
+    volumes:
+      - ./data/www:/www
+    env_file:
+      - ./images/php/php.dev.env
+
+  db:
+    ports:
+      - "$DB_PORT:3306"
+    env_file:
+      - ./images/mysql/db.dev.env
+    networks:
+      - int
+      - ext
