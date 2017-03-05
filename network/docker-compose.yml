@@ -1,5 +1,13 @@
 version: "3"
 
 networks: 
-	main-lb-network:
-		driver: "overlay"
+  main:
+    driver: "bridge"
+
+services:
+
+  dummy:
+    image: alpine:latest
+    networks:
+      - main
+    command: sh
