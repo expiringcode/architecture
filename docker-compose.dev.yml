@@ -7,6 +7,8 @@ services:
       - ./data/www:/www
     env_file:
       - ./images/php/php.dev.env
+    logging:
+      driver: "json-file"
 
   db:
     ports:
@@ -16,8 +18,10 @@ services:
     networks:
       - int
       - ext
+    logging:
+      driver: "json-file"
 
-  proxy:
+  nginx:
     env_file: 
       - ./images/nginx/proxy.dev.env
     ports: 
@@ -27,3 +31,5 @@ services:
       - int
       - main
       - ext
+    logging:
+      driver: "json-file"
