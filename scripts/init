@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Setting up global network for multiple projects (if not exists)"
+
+if [ `docker network ls | grep -c network_main` != 1 ]; then 
+	docker-compose -f ../network/docker-compose.yml up -d; 
+else 
+	echo "Network had already been set"; 
+fi
