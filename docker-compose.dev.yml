@@ -16,3 +16,14 @@ services:
     networks:
       - int
       - ext
+
+  proxy:
+    env_file: 
+      - ./images/nginx/proxy.dev.env
+    ports: 
+      - "$PROXY_HTTP:80"
+      - "$PROXY_HTTPS:443"
+    networks:
+      - int
+      - main
+      - ext
