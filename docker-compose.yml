@@ -4,6 +4,8 @@ services:
 
   # BUILD PHP 7
   php: 
+    image: php_$PROJECT_NAME:$VERSION
+    container_name: php_$PROJECT_NAME
     build: ./images/php/7.0
     restart: always
     tty: true
@@ -25,6 +27,8 @@ services:
 
   # MYSQL 
   db:
+    image: db_$PROJECT_NAME:$VERSION
+    container_name: db_$PROJECT_NAME
     build: ./images/mysql
     volumes:
       - mysql_:/var/lib/mysql
@@ -40,6 +44,8 @@ services:
   
   # REDIS
   redis:
+    image: redis_$PROJECT_NAME:$VERSION
+    container_name: redis_$PROJECT_NAME
     build: ./images/redis
     volumes:
       - redis_:/data
@@ -52,7 +58,9 @@ services:
 
   # nginx
   nginx:
+    image: nginx_$PROJECT_NAME:$VERSION
     build: ./images/nginx
+    container_name: nginx_$PROJECT_NAME
     restart: always
     tty: true
     env_file: 
@@ -91,4 +99,4 @@ networks:
     internal: true
   main:
     external:
-      name: main-lb-network
+      name: network_main
