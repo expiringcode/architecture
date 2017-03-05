@@ -42,4 +42,4 @@ COPY ./conf /etc/nginx
 
 WORKDIR $WORKDIR
 
-CMD entrypoint && service nginx start && /bin/sh
+CMD entrypoint
