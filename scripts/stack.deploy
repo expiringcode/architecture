@@ -3,5 +3,6 @@
 ## loading .environment variables if exist
 if [ -f .env ]; then . .env; fi
 if [ -f ../.env ]; then . ../.env; fi
-	
-docker-compose -f ../docker-compose.yml -f ../docker-compose.dev.yml up -d --build --remove-orphans
+
+echo "Make sure you're running this command in a Docker Swarm environment";
+docker stack deploy

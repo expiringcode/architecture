@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## loading .environment variables if exist
+if [ -f .env ]; then . .env; fi
+if [ -f ../.env ]; then . ../.env; fi
+	
 echo "Setting up global network for multiple projects (if not exists)"
 
 if [ `docker network ls | grep -c network_main` != 1 ]; then 

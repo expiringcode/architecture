@@ -1,4 +1,8 @@
 #!/bin/bash
 
+## loading .environment variables if exist
+if [ -f .env ]; then . .env; fi
+if [ -f ../.env ]; then . ../.env; fi
+	
 docker-compose -f ../docker-compose.yml up -d --build
 
