@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ ! -z $1 ]; then
+	docker-compose build $1
+	docker-compose up --no-deps -d $1
+else
+	echo "Please enter the name of the service you want to deploy"
+fi
