@@ -1,0 +1,33 @@
+{
+  "name": "containers",
+  "version": "1.0.0",
+  "description": "Docker web framework initializer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caffeinalab/docker-webdev-env.git"
+  },
+  "keywords": [
+    "docker",
+    "web"
+  ],
+  "author": "Ani Sinanaj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/caffeinalab/docker-webdev-env/issues"
+  },
+  "homepage": "https://github.com/caffeinalab/docker-webdev-env#readme",
+  "preferGlobal": true,
+  "dependencies": {
+    "async": "^2.1.4",
+    "gm": "^1.23.0",
+    "image-size": "^0.5.0",
+    "pem": "^1.9.4",
+    "request": "^2.79.0",
+    "uglifyjs": "^2.4.10",
+    "unzip": "^0.1.11"
+  }
+}
