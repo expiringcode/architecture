@@ -62,17 +62,23 @@
 		"dev": {
 			"MYSQL_ROOT_PASSWORD": "root_password",
 			"MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+			"MYSQL_DATABASE": "test",
+			"MYSQL_USER": "root",
+			"MYSQL_PASSWORD": "admin",
 			"DB_HOST": "mysql",
 			"DB_NAME": "test",
 			"DB_USER": "root",
-			"DB_PASS": "admin",
+			"DB_PASS": "admin"
 		},
 		"prod": {
 			"MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+			"MYSQL_DATABASE": "test",
+			"MYSQL_USER": "root",
+			"MYSQL_PASSWORD": "admin",
 			"DB_HOST": "mysql",
 			"DB_NAME": "test",
 			"DB_USER": "root",
-			"DB_PASS": "admin",
+			"DB_PASS": "admin"
 		}
 	}
 }
