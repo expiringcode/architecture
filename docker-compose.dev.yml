@@ -27,6 +27,8 @@ services:
     ports: 
       - "$PROXY_HTTP:80"
       - "$PROXY_HTTPS:443"
+    volumes:
+      - ./data/www:/www
     networks:
       - int
       - main
