@@ -21,8 +21,8 @@ if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
 	then
 		ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
 	fi
+	
+	env >> "$WORKDIR/$PROJECT_NAME/.env"
 fi
-
-env >> "$WORKDIR/$PROJECT_NAME/.env"
 
 exec "$@"
