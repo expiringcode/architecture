@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict';
 
 var manifest   		= require('./package.json');
 var CWD 			= process.cwd();
@@ -10,7 +11,14 @@ var _ 				= require('underscore');
 var inquirer 		= require('inquirer');
 var prompt 			= require('prompt');
 var child_process	= require('child_process');
-var config 			= require('./config.json');
+var fs				= require('fs-extended');
+var exec 			= child_process.execSync;
+const containers 	= "https://github.com/caffeinalab/docker-webdev-env";
+
+var log = (err, stdout, stderr) => {
+	console.log(err, stdout, stderr);
+	if (err) error(err);
+};
 
 function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
@@ -18,7 +26,6 @@ function getUserHome() {
 
 // Log an event to the CLI + GA, and miserably exit
 function error(msg, code, dont_exit) {
-	ga.event("installation", "error", msg).send();
 	process.stdout.write(msg.red);
 
 	if (dont_exit == false) {
@@ -27,12 +34,12 @@ function error(msg, code, dont_exit) {
 }
 
 function reqEnvOrExit(){
-	if (!app.fs.existsSync('.env')) {
+	if (!fs.existsSync('.env')) {
 		process.stdout.write('.env file is missing. Generate it with `gen env`');
 	}
 }
 function gitCleanOrExit() {
-	var out = child_process.exec('git status --porcelain').output || '';
+	var out = exec('git status --porcelain').output || '';
 	var lines = (out.match(/\n/g) || []).length;
 	if (lines > 0) {
 		process.stdout.write('Current working directory is not clean. Please commit current changes before doing anything');
@@ -41,20 +48,61 @@ function gitCleanOrExit() {
 
 function gitTag(version) {
 	process.stdout.write("Tagging current changes...");
-	child_process.exec('git tag -d "' + version + '"');
-	child_process.exec('git tag "' + version + '" && git push --tags');
+	exec('git tag -d "' + version + '"');
+	exec('git tag "' + version + '" && git push --tags');
 }
 
 function gitCommit(message) {
 	process.stdout.write("Commiting current changes...");
-	child_process.exec('git add -A && git commit -am "' + message + '" && git push');
+	exec('git add -A && git commit -am "' + message + '" && git push');
 }
 
 function createProject(name) {
-	child_process.exec('mkdir -p ' + name);
-	child_process.exec('cd ' + name);
-	child_process.exec('touch config.json');
-	child_process.exec("echo " + JSON.stringfiy(config) + "| tee config.json");
+	process.stdout.write("Creating new project ".green + name +  "".green);
+
+	var cmd = [];
+
+	cmd.push('git clone ' + containers + " " + name);
+	cmd.push('cd ' + CWD + "/" + name);
+	cmd.push('ls -lash');
+	exec(cmd, log);
+	//exec('touch config.json');
+	//exec("echo {" + JSON.stringify(config) + "} | tee config.json");
+}
+
+function selectServices() {
+	//prompt;
+}
+
+function build(type) {
+	process.stdout.write("Building docker for the specified environment".green);
+
+	var cmd = "docker-compose -f docker-compose.yml ";
+	if (type == "dev") {
+		cmd += "-f docker-compose.dev.yml up -d --build --remove-orphans";
+	} else if (type == "prod") {
+		cmd += "up -d --build";
+	}
+
+	exec(cmd);
+}
+
+function clean() {
+	process.stdout.write("Careful! This command is to be used only on development environments".yellow);
+	process.stdout.write("\nIt will delete all docker networks and volumes along with all orphan containers".red);
+
+	exec("docker network prune -f && docker volume prune -f");
+}
+
+function loadBalancer() {
+	process.stdout.write("Creating main network and load balancer".green);
+	
+	var exists = exec("docker network ls | grep -c network_main", (error, stdout, stderror) => {
+		if (error) return;
+		if (stdout) {
+			console.log(stdout);
+		}
+	});
 }
 
 /////////////////////////
@@ -71,8 +119,8 @@ program
 ////////////
 
 program
-.command('init')
-.description('Initialize project')
+.command('create')
+.description('Initialize a new project')
 .action(function(name) {
 	var self = this;
 	if (!name) return false;
@@ -80,7 +128,20 @@ program
 	createProject(name);
 });
 
+program
+.command('build')
+.description('Build the project')
+.action(build);
 
+program
+.command('clean')
+.description('Clean the whole docker environment')
+.action(clean);
+
+program
+.command('lb')
+.description('Create a load balancer and the main network where to attach all the projects')
+.action(loadBalancer);
 
 
 
