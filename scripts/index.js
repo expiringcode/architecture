@@ -12,7 +12,7 @@ var inquirer 		= require('inquirer');
 var prompt 			= require('prompt');
 var child_process	= require('child_process');
 var fs				= require('fs-extended');
-var exec 			= child_process.execSync;
+var exec 			= child_process.spawnSync;
 const containers 	= "https://github.com/caffeinalab/docker-webdev-env";
 
 var log = (err, stdout, stderr) => {
@@ -58,14 +58,20 @@ function gitCommit(message) {
 }
 
 function createProject(name) {
-	process.stdout.write("Creating new project ".green + name +  "".green);
+	process.stdout.write("Creating new project ".green + name +  "\n\n".green);
 
-	var cmd = [];
+	var creating = exec('git clone ' + containers + " " + name);
 
-	cmd.push('git clone ' + containers + " " + name);
-	cmd.push('cd ' + CWD + "/" + name);
-	cmd.push('ls -lash');
-	exec(cmd, log);
+	process.stdout.write("Cloned base project\n\n".green);
+	creating.stdout.on("data", (data) => {
+		console.log(data);
+		var cls = exec("cd " + name);
+		cls.stdout.on("data", (data) => {
+			console.log(data);
+		});
+	});
+	
+
 	//exec('touch config.json');
 	//exec("echo {" + JSON.stringify(config) + "} | tee config.json");
 }
@@ -95,13 +101,10 @@ function clean() {
 }
 
 function loadBalancer() {
-	process.stdout.write("Creating main network and load balancer".green);
+	process.stdout.write("Creating main network and load balancer\n\n".green);
 	
-	var exists = exec("docker network ls | grep -c network_main", (error, stdout, stderror) => {
-		if (error) return;
-		if (stdout) {
-			console.log(stdout);
-		}
+	exec("docker network ls", (error, stdout, stderr) => {
+		process.stdout.write(error, stdout, stderr);
 	});
 }
 
