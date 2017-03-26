@@ -131,7 +131,8 @@ program
 	}
 	createProject(name)
 	.then(function() {
-		exec("cd " + name);
+		process.chdir(CWD + "/" + name);
+		//console.log(process.cwd());
 		console.log("Project cloned.".green)
 	})
 	.catch(function(e, stderr) {
