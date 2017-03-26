@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 'use strict';
 
-var manifest   		= require('./package.json');
-var CWD 			= process.cwd();
-var async 			= require('async');
-var gm 				= require('gm');
-var path 			= require('path');
-var program 		= require('commander');
-var _ 				= require('underscore');
-var inquirer 		= require('inquirer');
-var prompt 			= require('prompt');
-var child_process	= require('child_process');
-var fs				= require('fs-extended');
-var exec 			= child_process.spawnSync;
+const manifest   	= require('./package.json');
+const CWD 			= process.cwd();
+const async 		= require('async');
+const gm 			= require('gm');
+const path 			= require('path');
+const program 		= require('commander');
+const _ 			= require('underscore');
+const inquirer 		= require('inquirer');
+const prompt 		= require('prompt');
+const child_process	= require('child_process');
+const fs			= require('fs-extended');
+const Q				= require('q');
+const exec 			= child_process.exec;
 const containers 	= "https://github.com/caffeinalab/docker-webdev-env";
 
 var log = (err, stdout, stderr) => {
@@ -38,6 +39,7 @@ function reqEnvOrExit(){
 		process.stdout.write('.env file is missing. Generate it with `gen env`');
 	}
 }
+
 function gitCleanOrExit() {
 	var out = exec('git status --porcelain').output || '';
 	var lines = (out.match(/\n/g) || []).length;
@@ -58,22 +60,19 @@ function gitCommit(message) {
 }
 
 function createProject(name) {
-	process.stdout.write("Creating new project ".green + name +  "\n\n".green);
+	return Q.promise(function(resolve, reject) {
 
-	var creating = exec('git clone ' + containers + " " + name);
+		if (fs.existsSync(name)) {
+			return reject("A folder named <" + name + "> already exists");
+		}
 
-	process.stdout.write("Cloned base project\n\n".green);
-	creating.stdout.on("data", (data) => {
-		console.log(data);
-		var cls = exec("cd " + name);
-		cls.stdout.on("data", (data) => {
-			console.log(data);
+		process.stdout.write("Creating new project ".green + name +  "\n".green);
+		let cmd = ['git','clone', containers, name].join(" ");
+		exec(cmd, (err, stdout, stderr) => {
+			if (err) return reject(err, stderr)
+			resolve(stdout, stderr);
 		});
 	});
-	
-
-	//exec('touch config.json');
-	//exec("echo {" + JSON.stringify(config) + "} | tee config.json");
 }
 
 function selectServices() {
@@ -101,7 +100,7 @@ function clean() {
 }
 
 function loadBalancer() {
-	process.stdout.write("Creating main network and load balancer\n\n".green);
+	process.stdout.write("Creating main network and load balancer\n".green);
 	
 	exec("docker network ls", (error, stdout, stderr) => {
 		process.stdout.write(error, stdout, stderr);
@@ -126,9 +125,19 @@ program
 .description('Initialize a new project')
 .action(function(name) {
 	var self = this;
-	if (!name) return false;
-	
-	createProject(name);
+	if (!_.isString(name)) {
+		process.stdout.write("Please provide a name for your project\n".red);
+		return false;
+	}
+	createProject(name)
+	.then(function() {
+		exec("cd " + name);
+		console.log("Project cloned.".green)
+	})
+	.catch(function(e, stderr) {
+		if (_.isString(e)) console.log(e.red)
+		else console.log(e);
+	})
 });
 
 program
