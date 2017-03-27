@@ -1,4 +1,4 @@
-# DOckerized sytem for web development
+# Dockerized sytem for web development
 
 A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with imagick enabled php-md and other modules) and MySQL - More services to be added
 
