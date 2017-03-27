@@ -55,6 +55,10 @@ A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with ima
         * ssh
             - conf
 
+## Proposed Architecture
+
+![architecture](1.png)
+
 ## Files saved persistently
 
 ### configuration files:
