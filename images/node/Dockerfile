@@ -4,4 +4,10 @@ RUN mkdir /app
 
 WORKDIR /app
 
-CMD [ "node" ]
+COPY entrypoint /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/entrypoint
+
+# ENTRYPOINT entrypoint
+
+CMD [ "entrypoint" ]
