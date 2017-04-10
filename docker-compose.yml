@@ -109,6 +109,34 @@ services:
           cpus: '0.0001'
           memory: 1G
 
+  # NODE
+  node:
+    image: node_$PROJECT_NAME:$VERSION
+    container_name: node_$PROJECT_NAME
+    build: ./images/node
+    volumes:
+      - frontend_:/app
+    expose: 
+      - "3000"
+    restart: always
+    tty: true
+    networks:
+      - private
+      - loadbalancer0
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 1G
+        reservations:
+          cpus: '0.0001'
+          memory: 1G
+
   # nginx
   nginx:
     image: nginx_$PROJECT_NAME:$VERSION

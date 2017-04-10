@@ -36,6 +36,20 @@ services:
     logging:
       driver: "json-file"
 
+  node:
+    env_file: 
+      - ./images/node/node.env
+    ports: 
+      - "$FRONTEND_HTTP:3000"
+    volumes:
+      - ./data/app:/app
+    networks:
+      - private
+      - loadbalancer0
+      - public
+    logging:
+      driver: "json-file"
+
   owncloud:
     image: owncloud
     ports:
