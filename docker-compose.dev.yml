@@ -16,8 +16,8 @@ services:
     env_file:
       - ./images/mysql/db.dev.env
     networks:
-      - int
-      - ext
+      - private
+      - public
     logging:
       driver: "json-file"
 
@@ -30,9 +30,9 @@ services:
     volumes:
       - ./data/www:/www
     networks:
-      - int
-      - main
-      - ext
+      - private
+      - loadbalancer0
+      - public
     logging:
       driver: "json-file"
 

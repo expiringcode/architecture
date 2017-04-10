@@ -22,8 +22,8 @@ services:
     env_file:
       - ./images/php/php.env
     networks:
-      - ext
-      - int
+      - public
+      - private
     healthcheck:
       test: sh
       interval: 1m30s
@@ -55,7 +55,6 @@ services:
     build: ./images/mysql
     volumes:
       - mysql_:/var/lib/mysql
-      - mysql__:/var/log/mysql
     restart: always
     tty: true
     expose: 
@@ -63,7 +62,7 @@ services:
     env_file:
       - ./images/mysql/db.env
     networks:
-      - int
+      - private
     deploy:
       mode: replicated
       replicas: 2
@@ -95,7 +94,7 @@ services:
     restart: always
     tty: true
     networks:
-      - int
+      - private
     deploy:
       mode: global
       restart_policy:
@@ -121,7 +120,6 @@ services:
       - ./images/nginx/proxy.env
     volumes:
       - backend_:/www
-      - nginx__:/var/log/nginx
     depends_on:
       - php
     links:
@@ -134,8 +132,8 @@ services:
       - "$PROXY_HTTP:80"
       - "$PROXY_HTTPS:443"
     networks:
-      - int
-      - main
+      - private
+      - loadbalancer0
     healthcheck:
       test: sh
       interval: 1m30s
@@ -160,20 +158,17 @@ services:
           cpus: '0.0001'
           memory: 200M
 
-volumes: # 1 underscore, data voluem. 2 underscore, logs volume
+volumes:
   mongo_: 
   redis_:
   mysql_:
   backend_:
   frontend_:
-  nginx__:
-  mysql__:
-  proxy__:
 
 networks:
-  ext:
-  int:
+  public:
+  private:
     internal: true
-  main:
+  loadbalancer0:
     external:
-      name: network_main
+      name: network_loadbalancer0
