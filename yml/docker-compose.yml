@@ -6,7 +6,7 @@ services:
   php: 
     image: php_$PROJECT_NAME:$VERSION
     container_name: php_$PROJECT_NAME
-    build: ./images/php/7.0
+    build: ../images/php/7.0
     restart: always
     tty: true
     depends_on:
@@ -20,7 +20,7 @@ services:
       - db:mysql
       - redis
     env_file:
-      - ./images/php/php.env
+      - ../images/php/php.env
     networks:
       - public
       - private
@@ -52,7 +52,7 @@ services:
   db:
     image: db_$PROJECT_NAME:$VERSION
     container_name: db_$PROJECT_NAME
-    build: ./images/mysql
+    build: ../images/mysql
     volumes:
       - mysql_:/var/lib/mysql
     restart: always
@@ -60,7 +60,7 @@ services:
     expose: 
       - "3306"
     env_file:
-      - ./images/mysql/db.env
+      - ../images/mysql/db.env
     networks:
       - private
     deploy:
@@ -86,7 +86,7 @@ services:
   redis:
     image: redis_$PROJECT_NAME:$VERSION
     container_name: redis_$PROJECT_NAME
-    build: ./images/redis
+    build: ../images/redis
     volumes:
       - redis_:/data
     expose: 
@@ -113,7 +113,7 @@ services:
   node:
     image: node_$PROJECT_NAME:$VERSION
     container_name: node_$PROJECT_NAME
-    build: ./images/node
+    build: ../images/node
     volumes:
       - frontend_:/app
     expose: 
@@ -140,12 +140,12 @@ services:
   # nginx
   nginx:
     image: nginx_$PROJECT_NAME:$VERSION
-    build: ./images/nginx
+    build: ../images/nginx
     container_name: nginx_$PROJECT_NAME
     restart: always
     tty: true
     env_file: 
-      - ./images/nginx/proxy.env
+      - ../images/nginx/proxy.env
     volumes:
       - backend_:/www
     depends_on:

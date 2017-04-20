@@ -4,9 +4,9 @@ services:
   
   php:
     volumes:
-      - ./data/www:/www
+      - ../data/www:/www
     env_file:
-      - ./images/php/php.dev.env
+      - ../images/php/php.dev.env
     logging:
       driver: "json-file"
 
@@ -14,7 +14,7 @@ services:
     ports:
       - "$DB_PORT:3306"
     env_file:
-      - ./images/mysql/db.dev.env
+      - ../images/mysql/db.dev.env
     networks:
       - private
       - public
@@ -23,12 +23,12 @@ services:
 
   nginx:
     env_file: 
-      - ./images/nginx/proxy.dev.env
+      - ../images/nginx/proxy.dev.env
     ports: 
       - "$PROXY_HTTP:80"
       - "$PROXY_HTTPS:443"
     volumes:
-      - ./data/www:/www
+      - ../data/www:/www
     networks:
       - private
       - loadbalancer0
@@ -38,11 +38,11 @@ services:
 
   node:
     env_file: 
-      - ./images/node/node.env
+      - ../images/node/node.env
     ports: 
       - "$FRONTEND_HTTP:3000"
     volumes:
-      - ./data/app:/app
+      - ../data/app:/app
     networks:
       - private
       - loadbalancer0
