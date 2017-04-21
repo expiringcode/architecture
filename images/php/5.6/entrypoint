@@ -21,8 +21,32 @@ if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
 	then
 		ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
 	fi
-
-	env >> "$WORKDIR/$PROJECT_NAME/.env"
 fi
+
+FILE="$WORKDIR/$PROJECT_NAME/.env"
+TMP=.tmp
+
+if [ -f $FILE ]; then
+	rm -rf $FILE
+fi
+
+touch $FILE
+env >> $TMP
+
+while read e; do
+	case $e in
+		*\ * )
+			echo "WARN Whitespaces in environment variables will be eliminated. Avoid them. ($e)"
+			echo "${e%=*}='${e##*=}'" >> $FILE
+			
+			;;
+		*)
+			echo "OK $e"
+			echo $e >> $FILE
+
+			;;
+	esac
+done <$TMP
+rm -rf $TMP
 
 exec "$@"
