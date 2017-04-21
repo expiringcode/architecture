@@ -49,8 +49,3 @@ services:
       - public
     logging:
       driver: "json-file"
-
-  owncloud:
-    image: owncloud
-    ports:
-      - 8080:80
