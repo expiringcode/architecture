@@ -10,18 +10,19 @@ fi
 if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
 	cd $WORKDIR
 
-	composer create-project --keep-vcs aeria/work $PROJECT_NAME
+	if [ ! -z $AERIAWORK_ENABLED ]; then 
+		composer create-project --keep-vcs aeria/work $PROJECT_NAME
 
-	if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep server)" ]
-	then
-		ln -sf $WORKDIR/$PROJECT_NAME/server/ $WORKDIR/nginx/$PROJECT_NAME
+		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep server)" ]
+		then
+			ln -sf $WORKDIR/$PROJECT_NAME/server/ $WORKDIR/nginx/$PROJECT_NAME
+		fi
+
+		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep nginx)" ]
+		then
+			ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
+		fi
 	fi
-
-	if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep nginx)" ]
-	then
-		ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
-	fi
-
 fi
 
 FILE="$WORKDIR/$PROJECT_NAME/.env"
