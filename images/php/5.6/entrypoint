@@ -22,6 +22,8 @@ if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
 		then
 			ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
 		fi
+	else
+		mkdir -p $WORKDIR/$PROJECT_NAME
 	fi
 fi
 
