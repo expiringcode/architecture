@@ -17,8 +17,9 @@ ENV PHP_MODS \
 	php-imagick
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends software-properties-common --allow-unauthenticated \
-	&& add-apt-repository ppa:ondrej/php \
+	&& apt-get install -y --no-install-recommends software-properties-common language-pack-en-base --allow-unauthenticated \
+	&& export LC_ALL=en_US.UTF-8 \
+	&& export LANG=en_US.UTF-8 \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --allow-unauthenticated \
 		# $PHPIZE_DEPS \
