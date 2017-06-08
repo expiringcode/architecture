@@ -4,8 +4,8 @@ services:
 
   # BUILD PHP 7
   php: 
-    image: php_$PROJECT_NAME:$VERSION
-    container_name: php_$PROJECT_NAME
+    image: php_$PROJECT_NAME$GIT_BRANCH:$VERSION
+    container_name: php_$PROJECT_NAME$GIT_BRANCH
     build: ../images/php/7.0
     restart: always
     tty: true
@@ -50,8 +50,8 @@ services:
 
   # MYSQL 
   db:
-    image: db_$PROJECT_NAME:$VERSION
-    container_name: db_$PROJECT_NAME
+    image: db_$PROJECT_NAME$GIT_BRANCH:$VERSION
+    container_name: db_$PROJECT_NAME$GIT_BRANCH
     build: ../images/mysql
     volumes:
       - mysql_:/var/lib/mysql
@@ -84,8 +84,8 @@ services:
   
   # REDIS
   redis:
-    image: redis_$PROJECT_NAME:$VERSION
-    container_name: redis_$PROJECT_NAME
+    image: redis_$PROJECT_NAME$GIT_BRANCH:$VERSION
+    container_name: redis_$PROJECT_NAME$GIT_BRANCH
     build: ../images/redis
     volumes:
       - redis_:/data
@@ -111,8 +111,8 @@ services:
 
   # NODE
   node:
-    image: node_$PROJECT_NAME:$VERSION
-    container_name: node_$PROJECT_NAME
+    image: node_$PROJECT_NAME$GIT_BRANCH:$VERSION
+    container_name: node_$PROJECT_NAME$GIT_BRANCH
     build: ../images/node
     volumes:
       - frontend_:/app
@@ -139,9 +139,9 @@ services:
 
   # nginx
   nginx:
-    image: nginx_$PROJECT_NAME:$VERSION
+    image: nginx_$PROJECT_NAME$GIT_BRANCH:$VERSION
     build: ../images/nginx
-    container_name: nginx_$PROJECT_NAME
+    container_name: nginx_$PROJECT_NAME$GIT_BRANCH
     restart: always
     tty: true
     env_file: 
