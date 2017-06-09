@@ -87,4 +87,7 @@ COPY ./conf/* /etc/php/5.6/fpm/
 
 COPY entrypoint /usr/local/bin/
 
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+	CMD { service php5.6-fpm status | grep "not running" && exit 1; } || exit 0;
+
 CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a

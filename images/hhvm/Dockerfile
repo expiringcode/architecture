@@ -31,4 +31,7 @@ COPY ./conf/* /etc/hhvm/
 
 COPY entrypoint /usr/local/bin/
 
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+	CMD { service hhvm status | grep "not running" && exit 1; } || exit 0;
+
 CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a

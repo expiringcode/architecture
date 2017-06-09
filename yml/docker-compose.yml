@@ -24,11 +24,6 @@ services:
     networks:
       - public
       - private
-    healthcheck:
-      test: sh
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
     deploy:
       mode: replicated
       replicas: 6
