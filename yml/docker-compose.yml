@@ -3,48 +3,46 @@ version: '3'
 services:
 
   # BUILD PHP 7
-  php: 
+  php7: 
     image: php_$PROJECT_NAME$GIT_BRANCH:$VERSION
     container_name: php_$PROJECT_NAME$GIT_BRANCH
-    build: ../images/php/7.0
+    build: 
+      context: ../images/php/7.0
+      args:
+        PHP_MODS: $PHP_MODS
     restart: always
     tty: true
-    depends_on:
-      - redis
-      - db
     expose: 
       - "9000"
     volumes:
       - backend_:/www
-    links:
-      - db:mysql
-      - redis
     env_file:
       - ../images/php/php.env
     networks:
-      - public
       - private
-    deploy:
-      mode: replicated
-      replicas: 6
-      update_config:
-        parallelism: 2
-        delay: 10s
-        failure_action: pause
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 512M
-        reservations:
-          cpus: '0.0001'
-          memory: 200M
+
+
+  # BUILD PHP 5.6
+  legacy: 
+    image: php_$PROJECT_NAME$GIT_BRANCH:$VERSION
+    container_name: php_$PROJECT_NAME$GIT_BRANCH
+    build: 
+      context: ../images/php/5.6
+      args:
+        PHP_MODS: $PHP_MODS
+    restart: always
+    tty: true
+    expose: 
+      - "9000"
+    volumes:
+      - backend_:/www
+    env_file:
+      - ../images/php/php.env
+    networks:
+      - private
 
   # MYSQL 
-  db:
+  mysql:
     image: db_$PROJECT_NAME$GIT_BRANCH:$VERSION
     container_name: db_$PROJECT_NAME$GIT_BRANCH
     build: ../images/mysql
@@ -58,24 +56,6 @@ services:
       - ../images/mysql/db.env
     networks:
       - private
-    deploy:
-      mode: replicated
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-      resources:
-        limits:
-          cpus: '0'
-          memory: 1.5G
-        reservations:
-          cpus: '0.0001'
-          memory: 1G
   
   # REDIS
   redis:
@@ -90,19 +70,6 @@ services:
     tty: true
     networks:
       - private
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 1G
-        reservations:
-          cpus: '0.0001'
-          memory: 1G
 
   # NODE
   node:
@@ -118,19 +85,6 @@ services:
     networks:
       - private
       - loadbalancer0
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 1G
-        reservations:
-          cpus: '0.0001'
-          memory: 1G
 
   # nginx
   nginx:
@@ -143,11 +97,6 @@ services:
       - ../images/nginx/proxy.env
     volumes:
       - backend_:/www
-    depends_on:
-      - php
-    links:
-      - db:mysql
-      - php:php7
     expose: 
       - "80"
       - "443"
@@ -157,29 +106,6 @@ services:
     networks:
       - private
       - loadbalancer0
-    healthcheck:
-      test: sh
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-    deploy:
-      mode: replicated
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: pause
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 5
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 200M
-        reservations:
-          cpus: '0.0001'
-          memory: 200M
 
 volumes:
   mongo_:

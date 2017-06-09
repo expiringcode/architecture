@@ -1,20 +1,6 @@
 FROM phusion/baseimage:0.9.19
-# ubuntu:xenial
 
-# persistent / runtime deps
-# ENV PHPIZE_DEPS \
-# 		autoconf \
-# 		file \
-# 		g++ \
-# 		gcc \
-# 		libc-dev \
-# 		make \
-# 		pkg-config \
-# 		re2c
-
-ENV PHP_MODS \
-	imagemagick \
-	php-imagick
+ARG PHP_MODS
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends software-properties-common language-pack-en-base --allow-unauthenticated \
@@ -22,10 +8,8 @@ RUN apt-get update \
 	&& export LANG=en_US.UTF-8 \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --allow-unauthenticated \
-		# $PHPIZE_DEPS \
 		ca-certificates \
 		curl \
-		# libedit2 \
 		libsqlite3-0 \
 		libxml2 \
 		xz-utils \
