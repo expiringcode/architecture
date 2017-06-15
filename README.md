@@ -2,7 +2,6 @@
 
 A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with imagick enabled php-md and other modules) and MySQL - More services to be added
 
-
 ## Services installation and configuration
 
 As the architecture below explains, this system is based on microservices. Each microservice is indipendent. 
@@ -20,7 +19,7 @@ $ wget -qO- https://get.docker.com/ | sh
 
 All you need to install in your VM is wget.
 
--
+***
 
 Now, in order to be able to launch a project the **Load Balancer** and its network must be set up. 
 
@@ -28,7 +27,7 @@ The *network* directory contains the **docker-compose** file needed to create th
 
 > Check out the feature branch `traefik` for a solution with [traefik](http://traefik.io) as a load balancer
 
--
+***
 
 And finally now you can set up your project. Open `docker-compose.yml` and `docker-compose.dev.yml` in the **yml** directory and configure it according to the project you're going to develop by removing or adding services. The `templates.yml` file contains snippets for other services. 
 
