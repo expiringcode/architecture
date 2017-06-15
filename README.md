@@ -5,55 +5,46 @@ A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with ima
 
 ## Services installation and configuration
 
-- **server-setup.sh** *Prepares a clean ubuntu installation for docker*
-- Docker
-    + `docker-compose up -d --build --remove-orphans` installs the microservices
-        * **Proxy** *Nginx server acting as a reverse proxy for php services, exposes ports 80 and 443. Enabled with 443* **built image**
-            - Configured for highest security
-            - Enabled letsencrypt for SSL only communications
-            - Enabled HTTP2 protocol
-            - `WORKDIR` to be set to */www*
-            - `SSLOPTS` to be set to `*-w /www/7.0 -d localhost -d 127.0.0.1*`
-            - The above environment variable is needed for letsencrypt certificate generation
-            - **Letsencrypt** certificates are renewed automatically by a cronjob **Not tested yet**
-        * **PHP** *`php`7.0 service with imagemagick and redis enabled* **built image**
-            - php-imagick
-            - php-redis
-            - php7.0-mysql
-            - php7.0-curl
-            - php7.0-mbstring
-            - php7.0-gd
-            - php7.0-mysqli
-            - php7.0-xml
-            - php7.0-mcrypt
-        * **DB** *MySQL service; accessed by other services as `mysql`. Change the environment variables before deploying*
-            - MYSQL_ROOT_PASSWORD: "root_password"
-            - MYSQL_USER: "admin"
-            - MYSQL_PASSWORD: "admin"
-            - MYSQL_DATABASE: "test"
-        * **Redis** *Redis service accessed as `redis`*
-        * **Legacy** *php5.6 for legacy projects configured with the same modules available for php7.0* **built image**
+As the architecture below explains, this system is based on microservices. Each microservice is indipendent. 
+
+This containerized infrastructure is designed to have multiple projects, each having its own services.
+To expose these projects, a new higher level network was added that will act as a load balancer and distribute the requests to the projects accordingly.
+
+The steps to prepare a machine for docker are simple. You can install it anywhere be it a virtual machine in the cloud or a dedicated machine or your home computer. 
+
+You can use this official script and install it on most OSes
+
+```bash
+$ wget -qO- https://get.docker.com/ | sh
+```
+
+All you need to install in your VM is wget.
+
+-
+
+Now, in order to be able to launch a project the **Load Balancer** and its network must be set up. 
+
+The *network* directory contains the **docker-compose** file needed to create these services. The ideal setup will have in this directory, all the services to automate project routing and https. Such as using *docker gen* and *let's encrypt*. But the important thing is the network called loadbalancer0.
+
+> Check out the feature branch `traefik` for a solution with [traefik](http://traefik.io) as a load balancer
+
+-
+
+And finally now you can set up your project. Open `docker-compose.yml` and `docker-compose.dev.yml` in the **yml** directory and configure it according to the project you're going to develop by removing or adding services. The `templates.yml` file contains snippets for other services. 
+
+Once done configuring the services, run the following command to create the environment.
+
+```bash
+$ docker-compose -f yml/docker-compose.yml -f yml/docker-compose.dev.yml up -d --build --remove-orphans
+```
+
+If you're familiar with docker you'll understand what the command above does. For those who are not, it loads the first docker-compose *yml* and then extends it with the second one, it brings *up* the services as a *deamon* so the command exits once the services are up and *builds* each service instead of using the pre-existing images. The *remove orphans* flag, removes any containers that have failed to launch previously.
+
+> Be careful that **remove orphans** can remove other projects' containers if **--project-name** is not specified before **up**
+
 
 ## File structure
 
-- Project
-    + images
-        * nginx
-            - conf
-        * hhvm
-            - conf
-        * php
-            - 5.6
-                + conf
-            - 7.0
-                + conf
-        * node
-        * mysql
-            - conf
-        * redis
-            - conf
-        * ssh
-            - conf
 
 ## Proposed Architecture
 
@@ -63,27 +54,4 @@ A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with ima
 
 ### configuration files:
 
-- ~~./conf/nginx:~~  **/etc/nginx**  ~~:ro~~
-- ~~./conf/redis/redis.conf:~~  **/usr/local/etc/redis/redis.conf**
-- ~~./conf/mongo:~~  **/data/configdb**
-- ~~./conf/mysql:~~  **/etc/mysql**  ~~:ro~~
-- ~~./conf/php-7.0/php.ini:~~  **/etc/php/7.0/fpm/php.ini**
-- ~~./conf/php-5.6/php.ini:~~  **/etc/php/5.6/fpm/php.ini**
-- ~~./conf/hhvm/php.ini:~~  **/etc/hhvm/php.ini**
-- ~~./conf/hhvm/server.ini:~~  **/etc/hhvm/server.ini**
-
-### logs:
-
-- ~~./logs/nginx:~~  **/var/log/nginx**
-- ~~./logs/mysql:~~  **/var/log/mysql**
-- ~~./logs/php/php7.0-fpm.log:~~  **/var/log/php7.0-fpm.log**
-- ~~./logs/php/php5.6-fpm.log:~~  **/var/log/php5.6-fpm.log**
-
-### data:
-
-- ~~./data/www:~~  **/www**
-- ~~./data/node:~~  **/app**
-- ~~./data/redis:~~  **/data**
-- ~~./data/mongo:~~  **/data/db**
-- ~~./data/mysql:~~  **/var/lib/mysql**
 
