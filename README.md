@@ -55,7 +55,7 @@ There's a global *.env* in the root directory of the repo which has some setting
 
 ## Proposed Architecture
 
-![architecture](1.png)
+![architecture](cloud.png)
 
 ## Files saved persistently
 
