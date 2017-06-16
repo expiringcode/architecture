@@ -41,9 +41,17 @@ If you're familiar with docker you'll understand what the command above does. Fo
 
 > Be careful that **remove orphans** can remove other projects' containers if **--project-name** is not specified before **up**
 
+***
+
+The `yml` files are highly customisable through .env files. Each service defined in **yml/docker-compose.yml** has is built through the corresponding image in **images/**. In the image directory of a service there is also it's *.env* file that contains all the configuration of that service. These *environment variables* are gonna be present inside the container as well during it's lifetime.
+
+There's a global *.env* in the root directory of the repo which has some settings that will fill in **docker-compose.yml** 
 
 ## File structure
 
+- images: Contains directories representing each service needed, thus a **Dockerfile**
+- yml: As described above, contains the docker-compose configuration
+- network: Again a docker-compose configuraiton but not for the project, for the load balancer in case you're going to run multiple projects
 
 ## Proposed Architecture
 
@@ -51,6 +59,12 @@ If you're familiar with docker you'll understand what the command above does. Fo
 
 ## Files saved persistently
 
+Upping the services with **docker-compose.dev.yml** will link volumes in your local machine. A **data** directory will be created and files that need to persist, such as your application or database, will be there. In production, these directories will be still persisten, but won't be linked in the host OS.
+
 ### configuration files:
 
+Before upping the services, go to the directory of each service you're using and change the configuration files. For example, for Nginx, you go to `images/nginx`. There you can get into `conf` and set it up the way you like as you would with any Nginx setup. These configuration files are copied inside the container automatically when it's built.
 
+***
+
+> Check out this other repo for a simpler management of this structure. [docker-deploy](https://github.com/progress44/docker-deploy)
