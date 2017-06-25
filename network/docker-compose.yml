@@ -12,13 +12,6 @@ volumes:
 
 services:
 
-  dummy:
-    container_name: lb_haproxy_global
-    image: alpine:latest
-    command: sh
-    networks:
-      - loadbalancer0
-
   lb_nginx:
     image: jwilder/nginx-proxy:alpine
     container_name: lb_nginx
