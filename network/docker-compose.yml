@@ -22,6 +22,7 @@ services:
   lb_nginx:
     image: jwilder/nginx-proxy:alpine
     container_name: lb_nginx
+    restart: always
     expose:
       - "80"
       - "443"
@@ -42,6 +43,7 @@ services:
       - lb_nginx
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: lb_letsencrypt
+    restart: always
     networks:
       - loadbalancer0
     volumes:
