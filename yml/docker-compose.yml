@@ -100,9 +100,6 @@ services:
     expose: 
       - "80"
       - "443"
-    ports: 
-      - "$PROXY_HTTP:80"
-      - "$PROXY_HTTPS:443"
     networks:
       - private
       - loadbalancer0
