@@ -17,6 +17,14 @@ You can use this official script and install it on most OSes
 $ wget -qO- https://get.docker.com/ | sh
 ```
 
+or
+
+```bash
+$ apt install docker.io
+$ apt install docker-compose
+```
+
+
 All you need to install in your VM is wget.
 
 ***
@@ -67,4 +75,4 @@ Before upping the services, go to the directory of each service you're using and
 
 ***
 
-> Check out this other repo for a simpler management of this structure. [docker-deploy](https://github.com/progress44/docker-deploy)
+> Check out this other repo for a simpler management of this structure. [docker-deploy](https://github.com/blimpair/blimp)
