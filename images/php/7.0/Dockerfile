@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM phusion/baseimage:0.9.19
 
 ARG PHP_MODS
 
