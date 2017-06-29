@@ -1,4 +1,4 @@
-FROM redis:latest
+FROM redis:3-alpine
 
 RUN rm -Rf /usr/local/etc/redis/redis.conf && mkdir -p /usr/local/etc/redis
 COPY ./conf /usr/local/etc/redis/

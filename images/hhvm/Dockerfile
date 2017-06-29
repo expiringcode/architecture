@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.19
+FROM debian:jessie
 # ubuntu:xenial
 
 ENV PHP_MODS \

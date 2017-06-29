@@ -1,22 +1,9 @@
 version: '3'
 
-# NGINX 
-   #proxy:
-     #cpu_shares: 73
-     #cpu_quota: 50000
-     #cpuset: 0,1
-     #mem_limit: 1000000000
-     #memswap_limit: 2000000000
-     #privileged: true
-     #read_only: true
-     #shm_size: 64M
-     #stdin_open: true
-     #tty: true
-
 services:
 
   # BUILD PHP 7
-  php: 
+  php7: 
     build: ./images/php/7.0
     restart: always
     tty: true

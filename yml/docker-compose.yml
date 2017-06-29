@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
 
@@ -114,7 +114,7 @@ volumes:
 networks:
   public:
   private:
-    internal: true
+#    internal: true
   loadbalancer0:
     external:
       name: network_loadbalancer0
