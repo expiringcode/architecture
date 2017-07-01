@@ -4,8 +4,8 @@ services:
 
   # BUILD PHP 7
   php7: 
-    image: php_7$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: php_7$PROJECT_NAME.$GIT_BRANCH
+    image: php7_$PROJECT_NAME.$GIT_BRANCH:$VERSION
+    container_name: php7_$PROJECT_NAME.$GIT_BRANCH
     build: 
       context: ../images/php/7.0
       args:
