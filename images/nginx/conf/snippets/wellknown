@@ -1,0 +1,6 @@
+## WELL KNOWN 
+
+	# Allowing access to .well-known for letsencrypt
+	location ~ /.well-known {
+        allow all;
+    }

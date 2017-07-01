@@ -29,6 +29,4 @@
     # openssl dhparam 2048 -out /ssl/dhparam.pem
     ssl_dhparam /ssl/dhparams.pem;
 
-    location ~ /.well-known {
-        allow all;
-    }
+    include /etc/nginx/snippets/wellknown;
