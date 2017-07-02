@@ -1,10 +1,9 @@
 set -e
 
+/usr/sbin/nginx -g "daemon on;";
+
 nginx -t
-
 ## Monitor directory changes to reload nginx with new directives
-
-service nginx start
 
 if [ -z "$(ls -A $WORKDIR | grep nginx)" ]; then
 	echo "Creating nginx dir because it doesn't exist"
@@ -12,4 +11,26 @@ if [ -z "$(ls -A $WORKDIR | grep nginx)" ]; then
 fi
 
 cd $WORKDIR/nginx/
-onchange service nginx reload && "$@"
+
+EVENTS="CREATE,CLOSE_WRITE,DELETE,MODIFY,MOVED_FROM,MOVED_TO"
+
+inotifywait -e "$EVENTS" -mr --format '%:e %f' $WORKDIR/nginx/* | (
+    WAITING="";
+    while true; do
+        LINE="";
+        read -t 1 LINE;
+        if test -z "$LINE"; then
+            if test ! -z "$WAITING"; then
+                    echo "CHANGE";
+                    WAITING="";
+            fi;
+        else
+            WAITING=1;
+        fi;
+    done) | (
+    while true; do
+        read TMP;
+        /usr/sbin/nginx -s reload;
+        echo "Reloaded nginx";
+    done
+)
