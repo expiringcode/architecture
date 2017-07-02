@@ -1,0 +1,57 @@
+#!/bin/sh
+set -e
+php-fpm -D
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- php "$@"
+fi
+
+if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
+	cd $WORKDIR
+
+	if [ ! -z $AERIAWORK_ENABLED ]; then 
+		composer create-project --keep-vcs aeria/work $PROJECT_NAME
+
+		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep server)" ]
+		then
+			ln -sf $WORKDIR/$PROJECT_NAME/server/ $WORKDIR/nginx/$PROJECT_NAME
+		fi
+
+		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep nginx)" ]
+		then
+			ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
+		fi
+	else
+		mkdir -p $WORKDIR/$PROJECT_NAME
+	fi
+fi
+
+FILE="$WORKDIR/$PROJECT_NAME/.env"
+TMP=.tmp
+
+if [ -f $FILE ]; then
+	rm -rf $FILE
+fi
+
+touch $FILE
+env >> $TMP
+
+while read e; do
+	case $e in
+		*\ * )
+			echo "WARN Whitespaces in environment variables will be eliminated. Avoid them. ($e)"
+			echo "${e%=*}='${e##*=}'" >> $FILE
+			
+			;;
+		*)
+			echo "OK $e"
+			echo $e >> $FILE
+
+			;;
+	esac
+done <$TMP
+rm -rf $TMP
+
+
+exec "$@"
