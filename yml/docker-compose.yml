@@ -41,6 +41,25 @@ services:
     networks:
       - private
 
+  # BUILD PHP 7
+  phpa: 
+    image: phpa_$PROJECT_NAME.$GIT_BRANCH:$VERSION
+    container_name: phpa_$PROJECT_NAME.$GIT_BRANCH
+    build: 
+      context: ../images/php/alpine
+      args:
+        PHP_MODS: $PHP_MODS
+    restart: always
+    tty: true
+    expose: 
+      - "9000"
+    volumes:
+      - backend_:/www
+    env_file:
+      - ../images/php/php.env
+    networks:
+      - private
+
   # MYSQL 
   mysql:
     image: db_$PROJECT_NAME.$GIT_BRANCH:$VERSION
