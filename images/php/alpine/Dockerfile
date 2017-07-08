@@ -1,8 +1,11 @@
 FROM php:7.1-fpm-alpine
 
+ARG PHP_MODS
+
 RUN apk update && apk add --no-cache --virtual .build-deps \
 	curl \
-	git
+	git \
+	$PHP_MODS
 
 ENV PHP_INI_DIR /etc/php/7.1/fpm
 ENV PHP_VERSION 7.1
