@@ -32,8 +32,8 @@ services:
     env_file:
       - ../images/mysql/db.dev.env
     networks:
-      - private
-      - public
+      - tier_3
+      - tier_2
     logging:
       driver: "json-file"
 
@@ -46,9 +46,9 @@ services:
     volumes:
       - ../data/www:/www
     networks:
-      - private
-      - loadbalancer0
-      - public
+      - tier_3
+      - tier_1
+      - tier_2
     logging:
       driver: "json-file"
 
@@ -60,8 +60,8 @@ services:
     volumes:
       - ../data/app:/app
     networks:
-      - private
-      - loadbalancer0
-      - public
+      - tier_3
+      - tier_1
+      - tier_2
     logging:
       driver: "json-file"

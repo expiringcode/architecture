@@ -19,7 +19,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - private
+      - tier_3
 
 
   # BUILD PHP 5.6
@@ -39,7 +39,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - private
+      - tier_3
 
   # BUILD PHP 7
   phpa: 
@@ -58,7 +58,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - private
+      - tier_3
 
   # MYSQL 
   mysql:
@@ -74,7 +74,7 @@ services:
     env_file:
       - ../images/mysql/db.env
     networks:
-      - private
+      - tier_3
   
   # REDIS
   redis:
@@ -88,7 +88,7 @@ services:
     restart: always
     tty: true
     networks:
-      - private
+      - tier_3
 
   # NODE
   node:
@@ -104,8 +104,8 @@ services:
     restart: always
     tty: true
     networks:
-      - private
-      - loadbalancer0
+      - tier_3
+      - tier_0
 
   # nginx
   nginx:
@@ -122,8 +122,8 @@ services:
       - "80"
       - "443"
     networks:
-      - private
-      - loadbalancer0
+      - tier_3
+      - tier_0
 
 volumes:
   mongo_:
@@ -133,9 +133,21 @@ volumes:
   frontend_:
 
 networks:
-  public:
-  private:
-#    internal: true
-  loadbalancer0:
+  tier_2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 140.40.0.0/16
+          gateway: 140.40.0.1
+          
+  tier_3:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 160.60.0.0/16
+          gateway: 160.60.0.1
+    internal: true
+
+  tier_0:
     external:
-      name: network_loadbalancer0
+      name: network_tier_0
