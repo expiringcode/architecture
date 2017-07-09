@@ -7,6 +7,10 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
 	git \
 	$PHP_MODS
 
+RUN docker-php-ext-install \
+	mysqli \
+	pdo_mysql
+
 ENV PHP_INI_DIR /etc/php/7.1/fpm
 ENV PHP_VERSION 7.1
 ENV WORKDIR /www

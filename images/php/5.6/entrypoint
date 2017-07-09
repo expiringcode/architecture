@@ -41,7 +41,7 @@ while read e; do
 	case $e in
 		*\ * )
 			echo "WARN Whitespaces in environment variables will be eliminated. Avoid them. ($e)"
-			echo "${e%=*}='${e##*=}'" >> $FILE
+			# echo "${e%=*}='${e##*=}'" >> $FILE
 			
 			;;
 		*)
