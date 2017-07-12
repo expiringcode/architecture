@@ -2,6 +2,12 @@
 
 A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with imagick enabled php-md and other modules) and MySQL - More services to be added
 
+***
+
+## Do not run docker compose using `yml/docker-compose.yml` because it wouldn't work. Use [Blimp](https://github.com/blimpair/blimp) to configure it or remove uneeded containers manually.
+
+***
+
 ## Services installation and configuration
 
 As the architecture below explains, this system is based on microservices. Each microservice is indipendent. 
@@ -75,4 +81,4 @@ Before upping the services, go to the directory of each service you're using and
 
 ***
 
-> Check out this other repo for a simpler management of this structure. [docker-deploy](https://github.com/blimpair/blimp)
+> Check out this other repo for a simpler management of this structure. [blimp](https://github.com/blimpair/blimp)
