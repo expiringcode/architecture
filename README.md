@@ -2,7 +2,7 @@
 
 A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with imagick enabled php-md and other modules) and MySQL - More services to be added
 
-## Services installation and configuration
+## Services installation and configuration
 
 As the architecture below explains, this system is based on microservices. Each microservice is indipendent. 
 
