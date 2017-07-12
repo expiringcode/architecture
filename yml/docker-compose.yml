@@ -19,7 +19,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - tier_3
+      - $PROJECT_NAME.tier_3
 
 
   # BUILD PHP 5.6
@@ -39,7 +39,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - tier_3
+      - $PROJECT_NAME.tier_3
 
   # BUILD PHP 7
   phpa: 
@@ -58,7 +58,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - tier_3
+      - $PROJECT_NAME.tier_3
 
   # MYSQL 
   mysql:
@@ -74,7 +74,7 @@ services:
     env_file:
       - ../images/mysql/db.env
     networks:
-      - tier_3
+      - $PROJECT_NAME.tier_3
   
   # REDIS
   redis:
@@ -88,7 +88,7 @@ services:
     restart: always
     tty: true
     networks:
-      - tier_3
+      - $PROJECT_NAME.tier_3
 
   # NODE
   node:
@@ -104,8 +104,8 @@ services:
     restart: always
     tty: true
     networks:
-      - tier_3
-      - tier_0
+      - $PROJECT_NAME.tier_3
+      - $PROJECT_NAME.tier_0
 
   # nginx
   nginx:
@@ -122,8 +122,8 @@ services:
       - "80"
       - "443"
     networks:
-      - tier_3
-      - tier_0
+      - $PROJECT_NAME.tier_3
+      - $PROJECT_NAME.tier_0
 
 volumes:
   mongo_:
@@ -133,14 +133,14 @@ volumes:
   frontend_:
 
 networks:
-  tier_2:
+  $PROJECT_NAME.tier_2:
     driver: bridge
     ipam:
       config:
         - subnet: 140.40.0.0/16
           gateway: 140.40.0.1
           
-  tier_3:
+  $PROJECT_NAME.tier_3:
     driver: bridge
     ipam:
       config:
@@ -148,6 +148,6 @@ networks:
           gateway: 160.60.0.1
     internal: true
 
-  tier_0:
+  $PROJECT_NAME.tier_0:
     external:
-      name: network_tier_0
+      name: network_$PROJECT_NAME.tier_0
