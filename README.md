@@ -4,7 +4,7 @@ A preconfigured docker environment with NGINX, HHVM, PHP7, PHP5.6 (both with ima
 
 ***
 
-## Do not run docker compose using `yml/docker-compose.yml` because it wouldn't work. Use [Blimp](https://github.com/blimpair/blimp) to configure it or remove uneeded containers manually.
+> **Do not run docker compose using `yml/docker-compose.yml` because it wouldn't work. Use [Blimp](https://github.com/blimpair/blimp) to configure it or remove not needed containers manually.**
 
 ***
 
