@@ -19,7 +19,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - $PROJECT_NAME.tier_3
+      - tier_3
 
 
   # BUILD PHP 5.6
@@ -39,7 +39,7 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - $PROJECT_NAME.tier_3
+      - tier_3
 
   # BUILD PHP 7
   phpa: 
@@ -58,7 +58,23 @@ services:
     env_file:
       - ../images/php/php.env
     networks:
-      - $PROJECT_NAME.tier_3
+      - tier_3
+
+  # BUILD HHVM
+  hhvm: 
+    image: hhvm_$PROJECT_NAME.$GIT_BRANCH:$VERSION
+    container_name: hhvm_$PROJECT_NAME.$GIT_BRANCH
+    build: ./images/hhvm
+    restart: always
+    tty: true
+    expose: 
+      - "9000"
+    volumes:
+      - backend_:/www
+    env_file:
+      - ../images/php/php.env
+    networks:
+      - tier_3
 
   # MYSQL 
   mysql:
@@ -74,7 +90,7 @@ services:
     env_file:
       - ../images/mysql/db.env
     networks:
-      - $PROJECT_NAME.tier_3
+      - tier_3
   
   # REDIS
   redis:
@@ -88,7 +104,7 @@ services:
     restart: always
     tty: true
     networks:
-      - $PROJECT_NAME.tier_3
+      - tier_3
 
   # NODE
   node:
@@ -104,8 +120,47 @@ services:
     restart: always
     tty: true
     networks:
-      - $PROJECT_NAME.tier_3
-      - $PROJECT_NAME.tier_0
+      - tier_3
+  
+  # mongodb 
+  mongo:
+    image: mongo:latest
+    container_name: mongo_$PROJECT_NAME.$GIT_BRANCH
+    restart: always
+    tty: true
+    volumes:
+      - mongo_:/data/db
+    expose: 
+      - "27017"
+    networks:
+      - tier_3
+
+  # CASSANDRA
+   cassandra: 
+     image: cassandra:latest
+     container_name: cassandra_$PROJECT_NAME.$GIT_BRANCH
+     restart: always
+     tty: true
+     expose: 
+      - "7000"
+     volumes: 
+      - cassandra_:/var/lib/cassandra
+     networks:
+       - tier_3
+
+  # INFLUX DB
+   influxdb: 
+     image: influxdb:alpine
+     container_name: influxdb_$PROJECT_NAME.$GIT_BRANCH
+     restart: always
+     tty: true
+     expose: 
+       - "8086"
+       - "8083"
+     volumes: 
+       - influxdb_:/var/lib/influxdb
+     networks:
+       - tier_3
 
   # nginx
   nginx:
@@ -122,8 +177,8 @@ services:
       - "80"
       - "443"
     networks:
-      - $PROJECT_NAME.tier_3
-      - $PROJECT_NAME.tier_0
+      - tier_3
+      - tier_0
 
 volumes:
   mongo_:
@@ -131,16 +186,18 @@ volumes:
   mysql_:
   backend_:
   frontend_:
+  cassandra_:
+  influxdb_:
 
 networks:
-  $PROJECT_NAME.tier_2:
+  tier_2:
     driver: bridge
     ipam:
       config:
         - subnet: 140.40.0.0/16
           gateway: 140.40.0.1
           
-  $PROJECT_NAME.tier_3:
+  tier_3:
     driver: bridge
     ipam:
       config:
@@ -148,6 +205,6 @@ networks:
           gateway: 160.60.0.1
     internal: true
 
-  $PROJECT_NAME.tier_0:
+  tier_0:
     external:
-      name: network_$PROJECT_NAME.tier_0
+      name: network_tier_0
