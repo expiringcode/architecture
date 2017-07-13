@@ -136,31 +136,31 @@ services:
       - tier_3
 
   # CASSANDRA
-   cassandra: 
-     image: cassandra:latest
-     container_name: cassandra_$PROJECT_NAME.$GIT_BRANCH
-     restart: always
-     tty: true
-     expose: 
+  cassandra: 
+    image: cassandra:latest
+    container_name: cassandra_$PROJECT_NAME.$GIT_BRANCH
+    restart: always
+    tty: true
+    expose: 
       - "7000"
-     volumes: 
+    volumes: 
       - cassandra_:/var/lib/cassandra
-     networks:
-       - tier_3
+    networks:
+      - tier_3
 
   # INFLUX DB
-   influxdb: 
-     image: influxdb:alpine
-     container_name: influxdb_$PROJECT_NAME.$GIT_BRANCH
-     restart: always
-     tty: true
-     expose: 
-       - "8086"
-       - "8083"
-     volumes: 
-       - influxdb_:/var/lib/influxdb
-     networks:
-       - tier_3
+  influxdb: 
+    image: influxdb:alpine
+    container_name: influxdb_$PROJECT_NAME.$GIT_BRANCH
+    restart: always
+    tty: true
+    expose: 
+      - "8086"
+      - "8083"
+    volumes: 
+      - influxdb_:/var/lib/influxdb
+    networks:
+      - tier_3
 
   # nginx
   nginx:
