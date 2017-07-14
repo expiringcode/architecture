@@ -194,15 +194,15 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 140.40.0.0/16
-          gateway: 140.40.0.1
+        - subnet: 100.64.0.0/10
+          gateway: 100.64.0.1
           
   tier_3:
     driver: bridge
     ipam:
       config:
-        - subnet: 160.60.0.0/16
-          gateway: 160.60.0.1
+        - subnet: 100.65.0.0/10
+          gateway: 100.65.0.1
     internal: true
 
   tier_0:
