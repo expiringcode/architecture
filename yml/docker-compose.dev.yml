@@ -26,7 +26,7 @@ services:
     logging:
       driver: "json-file"
 
-  db:
+  mysql:
     ports:
       - "$DB_PORT:3306"
     env_file:
