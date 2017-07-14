@@ -203,7 +203,7 @@ networks:
     #   config:
     #     - subnet: 100.65.0.0/10
     #       gateway: 100.65.0.1
-    internal: true
+    # internal: true
 
   tier_0:
     external:
