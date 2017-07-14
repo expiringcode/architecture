@@ -191,18 +191,18 @@ volumes:
 
 networks:
   tier_2:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 100.64.0.0/10
-          gateway: 100.64.0.1
+    # driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 100.64.0.0/10
+    #       gateway: 100.64.0.1
           
   tier_3:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 100.65.0.0/10
-          gateway: 100.65.0.1
+    # driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 100.65.0.0/10
+    #       gateway: 100.65.0.1
     internal: true
 
   tier_0:
