@@ -178,7 +178,7 @@ services:
       - "443"
     networks:
       - tier_3
-      - tier_0
+      - tier_1
 
 volumes:
   mongo_:
@@ -208,3 +208,6 @@ networks:
   tier_0:
     external:
       name: network_tier_0
+  tier_1:
+    external:
+      name: network_tier_1
