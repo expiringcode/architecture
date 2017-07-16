@@ -5,9 +5,14 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY entrypoint /usr/local/bin/
+COPY docker-healthcheck /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/entrypoint
+RUN chmod +x /usr/local/bin/entrypoint \
+	&& chmod +x /usr/local/bin/docker-healthcheck
 
 # ENTRYPOINT entrypoint
+
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+	CMD ["docker-healthcheck"]
 
 CMD [ "entrypoint" ]
