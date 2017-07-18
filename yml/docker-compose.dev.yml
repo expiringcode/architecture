@@ -40,9 +40,6 @@ services:
   nginx:
     env_file: 
       - ../images/nginx/proxy.dev.env
-    ports: 
-      - "$PROXY_HTTP:80"
-      - "$PROXY_HTTPS:443"
     volumes:
       - ../data/www:/www
     networks:
@@ -55,13 +52,10 @@ services:
   node:
     env_file: 
       - ../images/node/node.env
-    ports: 
-      - "$FRONTEND_HTTP:3000"
     volumes:
       - ../data/app:/app
     networks:
       - tier_3
-      - tier_0
       - tier_2
     logging:
       driver: "json-file"
