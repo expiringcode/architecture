@@ -121,6 +121,7 @@ services:
     tty: true
     networks:
       - tier_3
+      - tier_1
   
   # mongodb 
   mongo:
