@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   
@@ -31,9 +31,6 @@ services:
       - "$DB_PORT:3306"
     env_file:
       - ../images/mysql/db.dev.env
-    networks:
-      - tier_3
-      - tier_2
     logging:
       driver: "json-file"
 
@@ -44,8 +41,7 @@ services:
       - ../data/www:/www
     networks:
       - tier_3
-      - tier_0
-      - tier_2
+      - tier_1
     logging:
       driver: "json-file"
 
@@ -56,6 +52,5 @@ services:
       - ../data/app:/app
     networks:
       - tier_3
-      - tier_2
     logging:
       driver: "json-file"
