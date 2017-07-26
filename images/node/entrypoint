@@ -14,5 +14,4 @@ else
 	echo "Package.json not found"
 fi
 
-
 node
