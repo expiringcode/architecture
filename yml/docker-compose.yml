@@ -124,7 +124,7 @@ services:
       - tier_1
   
   # mongodb 
-  mongo:
+  mongodb:
     image: mongo:latest
     container_name: mongo_$PROJECT_NAME.$GIT_BRANCH
     restart: always
