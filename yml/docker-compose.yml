@@ -14,6 +14,8 @@ services:
     tty: true
     expose: 
       - "9000"
+    volumes:
+      - backend_:/www
     env_file:
       - ../images/php/php.env
     networks:
@@ -183,6 +185,7 @@ volumes:
   mysql_:
   cassandra_:
   influxdb_:
+  backend_:
 
 networks:
   tier_2:
