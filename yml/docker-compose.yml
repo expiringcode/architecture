@@ -14,8 +14,6 @@ services:
     tty: true
     expose: 
       - "9000"
-    volumes:
-      - backend_:/www
     env_file:
       - ../images/php/php.env
     networks:
@@ -111,8 +109,6 @@ services:
     image: node_$PROJECT_NAME.$GIT_BRANCH:$VERSION
     # container_name: node_$PROJECT_NAME.$GIT_BRANCH
     build: ../images/node
-    volumes:
-      - frontend_:/app
     expose: 
       - "3000"
     env_file:
@@ -185,8 +181,6 @@ volumes:
   mongo_:
   redis_:
   mysql_:
-  backend_:
-  frontend_:
   cassandra_:
   influxdb_:
 
