@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -104,8 +104,6 @@ services:
   node:
     image: node_$PROJECT_NAME.$GIT_BRANCH:$VERSION
     build: ../images/node
-    volumes:
-      - frontend_:/app
     expose: 
       - "3000"
     env_file:
@@ -114,9 +112,10 @@ services:
     tty: true
     networks:
       - tier_3
+      - tier_1
   
   # mongodb 
-  mongo:
+  mongodb:
     image: mongo:latest
     restart: always
     tty: true
@@ -132,12 +131,12 @@ services:
     image: cassandra:latest
     restart: always
     tty: true
-    expose:
+    expose: 
       - "7000"
-     volumes: 
+    volumes: 
       - cassandra_:/var/lib/cassandra
-     networks:
-       - tier_3
+    networks:
+      - tier_3
 
   # INFLUX DB
   influxdb: 
@@ -167,33 +166,35 @@ services:
       - "443"
     networks:
       - tier_3
-      - tier_0
+      - tier_1
 
 volumes:
   mongo_:
   redis_:
   mysql_:
-  backend_:
-  frontend_:
   cassandra_:
   influxdb_:
+  backend_:
 
 networks:
   tier_2:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 140.40.0.0/16
-          gateway: 140.40.0.1
+    # driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 100.64.0.0/10
+    #       gateway: 100.64.0.1
           
   tier_3:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 160.60.0.0/16
-          gateway: 160.60.0.1
-    internal: true
+    # driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 100.65.0.0/10
+    #       gateway: 100.65.0.1
+    # internal: true
 
   tier_0:
     external:
       name: network_tier_0
+  tier_1:
+    external:
+      name: network_tier_1

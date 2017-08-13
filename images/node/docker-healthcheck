@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eo pipefail
+
+exit 0;

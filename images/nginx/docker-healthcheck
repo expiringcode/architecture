@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# e interprets commands as && i.e. cm1 && cm2 && cm3
+# x displays all commands before executing them
+# -o pipefail, files pipe on the first command that fails not later on
+
+set -exo pipefail
+
+if [ `wget --spider -S "http://127.1" 2>&1 | grep "HTTP/" | awk '{print $2}'` = '200' ]; then 
+	exit 0; 
+fi
+
+exit 1;

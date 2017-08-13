@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   
@@ -26,29 +26,22 @@ services:
     logging:
       driver: "json-file"
 
-  db:
+  mysql:
     ports:
       - "$DB_PORT:3306"
     env_file:
       - ../images/mysql/db.dev.env
-    networks:
-      - tier_3
-      - tier_2
     logging:
       driver: "json-file"
 
   nginx:
     env_file: 
       - ../images/nginx/proxy.dev.env
-    ports: 
-      - "$PROXY_HTTP:80"
-      - "$PROXY_HTTPS:443"
     volumes:
       - ../data/www:/www
     networks:
       - tier_3
       - tier_1
-      - tier_2
     logging:
       driver: "json-file"
 
@@ -59,7 +52,5 @@ services:
       - ../data/app:/app
     networks:
       - tier_3
-      - tier_1
-      - tier_2
     logging:
       driver: "json-file"

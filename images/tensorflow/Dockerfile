@@ -1,0 +1,2 @@
+FROM tensorflow/tensorflow:latest
+

@@ -5,6 +5,7 @@ ARG PHP_MODS
 RUN apk update && apk add --no-cache --virtual .build-deps \
 	curl \
 	git \
+	fcgi \
 	$PHP_MODS
 
 RUN docker-php-ext-install \
@@ -30,7 +31,11 @@ COPY ./conf/* /usr/local/etc/php/conf.d/
 
 WORKDIR $WORKDIR
 
-# HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
-# 	CMD { service php7.0-fpm status | grep "not running" && exit 1; } || exit 0;
+HEALTHCHECK --interval=10s --timeout=3s \
+    CMD \
+    SCRIPT_NAME=/ping \
+    SCRIPT_FILENAME=/ping \
+    REQUEST_METHOD=GET \
+    cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 
 ENTRYPOINT entrypoint php -a
