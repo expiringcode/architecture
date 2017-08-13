@@ -7,12 +7,12 @@ if [ ! -z "$(ls -A . | grep package.json)" ]; then
 
 	if [ -z "$(ls -A . | grep yarn.lock)" ]; then
 		yarn 	
+	else 
+		npm install
 	fi
 
-	npm run deploy
+	node app.js
 else
 	echo "Package.json not found"
+	node
 fi
-
-
-node

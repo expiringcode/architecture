@@ -5,7 +5,6 @@ services:
   # BUILD PHP 7
   php7: 
     image: php7_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: php7_$PROJECT_NAME.$GIT_BRANCH
     build: 
       context: ../images/php/7.0
       args:
@@ -25,7 +24,6 @@ services:
   # BUILD PHP 5.6
   legacy: 
     image: php5_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: php5_$PROJECT_NAME.$GIT_BRANCH
     build: 
       context: ../images/php/5.6
       args:
@@ -44,7 +42,6 @@ services:
   # BUILD PHP 7
   phpa: 
     image: phpa_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: phpa_$PROJECT_NAME.$GIT_BRANCH
     build: 
       context: ../images/php/alpine
       args:
@@ -63,7 +60,6 @@ services:
   # BUILD HHVM
   hhvm: 
     image: hhvm_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: hhvm_$PROJECT_NAME.$GIT_BRANCH
     build: ./images/hhvm
     restart: always
     tty: true
@@ -79,7 +75,6 @@ services:
   # MYSQL 
   mysql:
     image: db_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: db_$PROJECT_NAME.$GIT_BRANCH
     build: ../images/mysql
     volumes:
       - mysql_:/var/lib/mysql
@@ -95,7 +90,6 @@ services:
   # REDIS
   redis:
     image: redis_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: redis_$PROJECT_NAME.$GIT_BRANCH
     build: ../images/redis
     volumes:
       - redis_:/data
@@ -109,7 +103,6 @@ services:
   # NODE
   node:
     image: node_$PROJECT_NAME.$GIT_BRANCH:$VERSION
-    container_name: node_$PROJECT_NAME.$GIT_BRANCH
     build: ../images/node
     volumes:
       - frontend_:/app
@@ -125,7 +118,6 @@ services:
   # mongodb 
   mongo:
     image: mongo:latest
-    container_name: mongo_$PROJECT_NAME.$GIT_BRANCH
     restart: always
     tty: true
     volumes:
@@ -136,12 +128,11 @@ services:
       - tier_3
 
   # CASSANDRA
-   cassandra: 
-     image: cassandra:latest
-     container_name: cassandra_$PROJECT_NAME.$GIT_BRANCH
-     restart: always
-     tty: true
-     expose: 
+  cassandra: 
+    image: cassandra:latest
+    restart: always
+    tty: true
+    expose:
       - "7000"
      volumes: 
       - cassandra_:/var/lib/cassandra
@@ -149,24 +140,22 @@ services:
        - tier_3
 
   # INFLUX DB
-   influxdb: 
-     image: influxdb:alpine
-     container_name: influxdb_$PROJECT_NAME.$GIT_BRANCH
-     restart: always
-     tty: true
-     expose: 
-       - "8086"
-       - "8083"
-     volumes: 
-       - influxdb_:/var/lib/influxdb
-     networks:
-       - tier_3
+  influxdb: 
+    image: influxdb:alpine
+    restart: always
+    tty: true
+    expose: 
+      - "8086"
+      - "8083"
+    volumes: 
+      - influxdb_:/var/lib/influxdb
+    networks:
+      - tier_3
 
   # nginx
   nginx:
     image: nginx_$PROJECT_NAME.$GIT_BRANCH:$VERSION
     build: ../images/nginx
-    container_name: nginx_$PROJECT_NAME.$GIT_BRANCH
     restart: always
     tty: true
     env_file: 

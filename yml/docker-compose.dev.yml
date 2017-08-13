@@ -53,10 +53,8 @@ services:
       driver: "json-file"
 
   node:
-    env_file: 
-      - ../images/node/node.env
-    ports: 
-      - "$FRONTEND_HTTP:3000"
+    env_file:
+      - ../images/node/node.dev.env
     volumes:
       - ../data/app:/app
     networks:
