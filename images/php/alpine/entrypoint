@@ -2,30 +2,47 @@
 set -e
 php-fpm -D
 
+## For production, app must be copied to /root/init
+if [ ! -z "$(ls -A /root/. | grep init)" ]; then
+	rm -rf $WORKDIR/.
+	mv -r /root/init/* $WORKDIR/
+	rm -rf /root/init
+fi
+
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- php "$@"
 fi
 
+##############
+# Init project if not found
 if [ -z "$(ls -A $WORKDIR | grep $PROJECT_NAME)" ]; then
 	cd $WORKDIR
 
-	if [ ! -z $AERIAWORK_ENABLED ]; then 
+	if [ ! -z $AERIAWORK_ENABLED -a $AERIAWORK_ENABLED != "''" -a $DEVELOPMENT -eq 1 ]; then 
+
+		## Creating aeriawork project
 		composer create-project --keep-vcs aeria/work $PROJECT_NAME
 
+		## Copying server configuration from server folder
 		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep server)" ]
 		then
 			ln -sf $WORKDIR/$PROJECT_NAME/server/ $WORKDIR/nginx/$PROJECT_NAME
 		fi
 
+		## Copying server configuration from nginx folder
 		if [ ! -z "$(ls -A $WORKDIR/$PROJECT_NAME | grep nginx)" ]
 		then
 			ln -sf $WORKDIR/$PROJECT_NAME/nginx/ $WORKDIR/nginx/$PROJECT_NAME
 		fi
 	else
+		## If aeriawork shouldn't be enabled, just create project dir
 		mkdir -p $WORKDIR/$PROJECT_NAME
 	fi
 fi
+
+##############
+## COPY env variables to file
 
 FILE="$WORKDIR/$PROJECT_NAME/.env"
 TMP=.tmp
@@ -52,6 +69,8 @@ while read e; do
 	esac
 done <$TMP
 rm -rf $TMP
+
+##############
 
 
 exec "$@"

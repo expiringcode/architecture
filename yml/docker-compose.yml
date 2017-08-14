@@ -108,6 +108,8 @@ services:
       - "3000"
     env_file:
       - ../images/node/node.env
+    volumes: 
+      - node_:/app
     restart: always
     tty: true
     networks:
@@ -169,6 +171,7 @@ services:
       - tier_1
 
 volumes:
+  node_:
   mongo_:
   redis_:
   mysql_:
