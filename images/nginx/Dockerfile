@@ -10,9 +10,6 @@ WORKDIR $WORKDIR
 COPY entrypoint /usr/bin
 COPY docker-healthcheck /usr/local/bin
 
-RUN mkdir -p nginx/default
-COPY ./conf/sites-available/core nginx/default/auto.conf
-
 RUN chmod +x /usr/bin/entrypoint \
 	&& chmod +x /usr/local/bin/docker-healthcheck \
 	&& mkdir -p $WORKDIR/nginx \
@@ -23,6 +20,15 @@ COPY ./conf /etc/nginx
 # # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+## Adding self-signed SSL
+RUN apk update && apk add openssl && \
+	mkdir -p /etc/nginx/cert && \
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+		-keyout /etc/nginx/cert/nginx.key \
+		-out /etc/nginx/cert/nginx.crt \
+		-subj "/C=IT/ST=Parma/L=Parma/O=Caffeina/OU=IT Department/CN=caffeina.com" && \
+	openssl dhparam 2048 -out /etc/nginx/cert/dhparam.pem
 
 HEALTHCHECK --interval=10s --timeout=3s \
     CMD ["docker-healthcheck"]
