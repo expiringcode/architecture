@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ ! -z "$(ls -A /root | grep init)" ]; then
+	mv -r /root/init/* .
+	rm -rf /root/init
+fi
+
 if [ ! -z "$(ls -A . | grep package.json)" ]; then
 	echo "Package.json found"
 	echo $WORKDIR
@@ -7,11 +12,13 @@ if [ ! -z "$(ls -A . | grep package.json)" ]; then
 
 	if [ -z "$(ls -A . | grep yarn.lock)" ]; then
 		yarn 	
+	else 
+		npm install
 	fi
 
-	npm run deploy
+	node app.js
 else
 	echo "Package.json not found"
+	echo "Launching node so container doesn't die"
+	node
 fi
-
-node

@@ -10,6 +10,9 @@ WORKDIR $WORKDIR
 COPY entrypoint /usr/bin
 COPY docker-healthcheck /usr/local/bin
 
+RUN mkdir -p nginx/default
+COPY ./conf/sites-available/core nginx/default/auto.conf
+
 RUN chmod +x /usr/bin/entrypoint \
 	&& chmod +x /usr/local/bin/docker-healthcheck \
 	&& mkdir -p $WORKDIR/nginx \
