@@ -172,8 +172,7 @@ services:
       - ../images/nginx/proxy.env
     volumes:
       - backend_:/www
-    expose: 
-      - "80"
+    expose:
       - "443"
     networks:
       - tier_3

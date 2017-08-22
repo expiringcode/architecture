@@ -5,7 +5,7 @@ server {
     server_name ~^(www\.)?(?<domain>.+)$;
     root /www;
 
-    #include /etc/nginx/snippets/sslhttp2;
+    include /etc/nginx/snippets/sslhttp2;
     
     include /etc/nginx/snippets/common;
 
