@@ -5,8 +5,8 @@
 	listen 443 ssl http2;
 
     ssl on;
-    ssl_certificate /etc/letsencrypt/live/$domain/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$domain/privkey.pem;
+    ssl_certificate /etc/nginx/cert/fullchain.pem;
+    ssl_certificate_key /etc/nginx/cert/privkey.pem;
 
     ssl_session_timeout 1h;
 
@@ -26,7 +26,7 @@
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
 
-    # openssl dhparam 2048 -out /ssl/dhparam.pem
-    ssl_dhparam /ssl/dhparams.pem;
+    # openssl dhparam 2048 -out /etc/nginx/cert/dhparam.pem
+    ssl_dhparam /etc/nginx/cert/dhparams.pem;
 
     include /etc/nginx/snippets/wellknown;

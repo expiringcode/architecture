@@ -2,8 +2,8 @@
 #      GENERIC ENVIRONMENT
 #
 server {
-    server_name ~^(www\.)?(?<domain>localhost|127\.0\.0\.1)$;
-    root /www/aeriawork/public;
+    server_name ~^(www\.)?(?<domain>.+)$;
+    root /www;
 
     #include /etc/nginx/snippets/sslhttp2;
     
@@ -15,7 +15,9 @@ server {
 
     include /etc/nginx/snippets/rewrite;
 
-    include /etc/nginx/snippets/php7;
+    #include /etc/nginx/snippets/php7;
+    #include /etc/nginx/snippets/php5.6;
+    #include /etc/nginx/snippets/phpa;
 
     include /etc/nginx/snippets/caching;
 
