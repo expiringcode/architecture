@@ -118,7 +118,8 @@ services:
   
   # mongodb 
   mongodb:
-    image: mongo:latest
+    image: mongo_$PROJECT_NAME.$GIT_BRANCH:$VERSION
+    build: ../images/mongo
     restart: always
     tty: true
     volumes:
