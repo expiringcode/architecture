@@ -1,17 +1,11 @@
 #!/bin/sh
 set -e
-php-fpm -D
 
 ## For production, app must be copied to /root/init
 if [ ! -z "$(ls -A /root/. | grep init)" ]; then
 	rm -rf $WORKDIR/.
 	mv -r /root/init/* $WORKDIR/
 	rm -rf /root/init
-fi
-
-# first arg is `-f` or `--some-option`
-if [ "${1#-}" != "$1" ]; then
-	set -- php "$@"
 fi
 
 ##############
@@ -72,5 +66,4 @@ rm -rf $TMP
 
 ##############
 
-
-exec "$@"
+docker-php-entrypoint $@

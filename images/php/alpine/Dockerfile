@@ -1,13 +1,5 @@
 FROM php:7.1-fpm-alpine
 
-ARG PHP_MODS
-
-RUN apk update && apk add --no-cache --virtual .build-deps \
-	curl \
-	git \
-	fcgi \
-	$PHP_MODS
-
 RUN docker-php-ext-install \
 	mysqli \
 	pdo_mysql
@@ -21,15 +13,18 @@ COPY entrypoint /usr/local/bin/
 RUN set -xe && curl -sS https://getcomposer.org/installer | php \
 	&& mv composer.phar /usr/local/bin/composer \
 	&& chmod +x /usr/local/bin/composer \
-	&& curl -LO https://deployer.org/deployer.phar \
-	&& mv deployer.phar /usr/local/bin/dep \
-	&& chmod +x /usr/local/bin/dep \
 	&& rm -Rf /etc/php/7.1/fpm/php.ini && mkdir -p /etc/php/7.1/fpm/ \
 	&& chmod +x /usr/local/bin/entrypoint
 
 COPY ./conf/* /usr/local/etc/php/conf.d/
 
 WORKDIR $WORKDIR
+
+RUN chown -R www-data:www-data $WORKDIR
+
+USER www-data
+
+COPY ./app .
 
 HEALTHCHECK --interval=10s --timeout=3s \
     CMD \
@@ -38,4 +33,6 @@ HEALTHCHECK --interval=10s --timeout=3s \
     REQUEST_METHOD=GET \
     cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 
-ENTRYPOINT entrypoint php -a
+ENTRYPOINT ["entrypoint"]
+
+CMD ["php-fpm"]
