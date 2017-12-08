@@ -1,11 +1,11 @@
-FROM php:7.1-fpm-alpine
+FROM php:7-fpm-alpine
 
 RUN docker-php-ext-install \
 	mysqli \
 	pdo_mysql
 
-ENV PHP_INI_DIR /etc/php/7.1/fpm
-ENV PHP_VERSION 7.1
+RUN apk update && apk add git
+
 ENV WORKDIR /www
 
 COPY entrypoint /usr/local/bin/
@@ -34,5 +34,4 @@ HEALTHCHECK --interval=10s --timeout=3s \
     cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 
 ENTRYPOINT ["entrypoint"]
-
 CMD ["php-fpm"]

@@ -1,12 +1,13 @@
 #!/bin/sh
 set -e
 
-## For production, app must be copied to /root/init
-if [ ! -z "$(ls -A /root/. | grep init)" ]; then
-	rm -rf $WORKDIR/.
-	mv -r /root/init/* $WORKDIR/
-	rm -rf /root/init
-fi
+## This can't be down with user www-data and is obsolete regardless 
+# ## For production, app must be copied to /root/init
+# if [ ! -z "$(ls -A /root/. | grep init)" ]; then
+# 	rm -rf $WORKDIR/.
+# 	mv -r /root/init/* $WORKDIR/
+# 	rm -rf /root/init
+# fi
 
 ##############
 # Init project if not found
