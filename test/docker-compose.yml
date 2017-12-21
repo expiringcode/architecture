@@ -1,6 +1,7 @@
 version: '2'
 
 services:
-  alpine: 
-    build: .
+
+  php:
+    build: ../images/hhvm
     tty: true

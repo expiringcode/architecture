@@ -1,37 +1,35 @@
-FROM debian:jessie
+FROM hhvm/hhvm:latest
 # ubuntu:xenial
-
-ENV PHP_MODS \
-	imagemagick \
-	php-imagick
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
-	wget \
-	&& wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | apt-key add - \
-	&& echo deb http://dl.hhvm.com/ubuntu saucy main | tee /etc/apt/sources.list.d/hhvm.list \
-	&& apt-get install -y --no-install-recommends hhvm \
-	ca-certificates \
-	curl \
-	# libedit2 \
-	libsqlite3-0 \
-	libxml2 \
-	xz-utils \
 	zip \
 	unzip \
-	git \
 	&& rm -r /var/lib/apt/lists/*
 
 ENV WORKDIR /www
 
 WORKDIR $WORKDIR
 
+RUN set -xe && curl -sS https://getcomposer.org/installer | php \
+	&& mv composer.phar /usr/local/bin/composer \
+	&& chmod +x /usr/local/bin/composer \
+	&& rm -Rf /etc/php/7.0/fpm/php.ini && mkdir -p /etc/php/7.0/fpm/
+
 RUN rm -Rf /etc/hhvm/php.ini && rm -Rf /etc/hhvm/server.ini
 COPY ./conf/* /etc/hhvm/
 
 COPY entrypoint /usr/local/bin/
+COPY ./app .
+
+RUN chmod +x /usr/local/bin/entrypoint && \
+	chown -R www-data:www-data $WORKDIR
+
+USER www-data
 
 HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
 	CMD { service hhvm status | grep "not running" && exit 1; } || exit 0;
 
-CMD chmod +x /usr/local/bin/entrypoint && entrypoint && php -a
+ENTRYPOINT ["entrypoint"]
+
+CMD ["sh"]
