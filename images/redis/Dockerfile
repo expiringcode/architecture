@@ -1,4 +1,4 @@
-FROM redis:3-alpine
+FROM redis:alpine
 
 RUN apk add --no-cache bash
 
