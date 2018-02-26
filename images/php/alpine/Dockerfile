@@ -1,10 +1,17 @@
-FROM php:7-fpm-alpine
+FROM php:fpm-alpine
 
 RUN docker-php-ext-install \
 	mysqli \
 	pdo_mysql
 
-RUN apk update && apk add git
+RUN apk update && apk add git imagemagick
+
+RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS imagemagick-dev libtool \
+&& export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" \
+&& pecl install imagick-3.4.3 \
+&& docker-php-ext-enable imagick \
+&& apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
+&& apk del .phpize-deps
 
 ENV WORKDIR /www
 
