@@ -2,20 +2,6 @@ FROM php:5-fpm
 
 RUN docker-php-ext-install mysqli
 
-# RUN apt-get update \
-# 	&& apt-get install -y --no-install-recommends --allow-unauthenticated \
-# 		ca-certificates \
-# 		php5.6-curl \
-# 		php-imagick \
-# 		php5.6-gd \
-# 		php5.6-mcrypt \
-# 		php5.6-redis \
-# 		php5.6-zip \
-# 		zip \
-# 		unzip \
-# 		git \
-# 	&& rm -r /var/lib/apt/lists/*
-
 ENV WORKDIR /www
 
 WORKDIR $WORKDIR
