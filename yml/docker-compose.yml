@@ -5,7 +5,7 @@ services:
 
   # BUILD PHP 5.6
   legacy: 
-    image: ${REGISTRY}${PROJECT_NAME}/php5:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/php5:${VERSION}
     build: 
       context: ../images/php/5.6
       args:
@@ -24,7 +24,7 @@ services:
 
   # BUILD PHP 7
   php7: 
-    image: ${REGISTRY}${PROJECT_NAME}/php7:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/php7:${VERSION}
     build: 
       context: ../images/php/alpine
       args:
@@ -43,7 +43,7 @@ services:
 
   # BUILD HHVM
   hhvm: 
-    image: ${REGISTRY}${PROJECT_NAME}/hhvm:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/hhvm:${VERSION}
     build: ./images/hhvm
     restart: always
     tty: true
@@ -59,7 +59,7 @@ services:
 
   # MYSQL 
   mysql:
-    image: ${REGISTRY}${PROJECT_NAME}/mariadb:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/mariadb:${VERSION}
     build: ../images/mysql
     volumes:
       - mysql_:/var/lib/mysql
@@ -75,7 +75,7 @@ services:
   
   # REDIS
   redis:
-    image: ${REGISTRY}${PROJECT_NAME}/redis:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/redis:${VERSION}
     build: ../images/redis
     volumes:
       - redis_:/data
@@ -89,7 +89,7 @@ services:
 
   # NODE
   node:
-    image: ${REGISTRY}${PROJECT_NAME}/node:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/node:${VERSION}
     build: ../images/node
     expose: 
       - "3000"
@@ -106,7 +106,7 @@ services:
   
   # mongodb 
   mongodb:
-    image: ${REGISTRY}${PROJECT_NAME}/mongo:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/mongo:${VERSION}
     build: ../images/mongo
     restart: always
     tty: true
@@ -147,7 +147,7 @@ services:
 
   # nginx
   nginx:
-    image: ${REGISTRY}${PROJECT_NAME}/nginx:${VERSION}
+    image: ${REGISTRY}/${PROJECT_NAME}/nginx:${VERSION}
     build: ../images/nginx
     restart: always
     tty: true
