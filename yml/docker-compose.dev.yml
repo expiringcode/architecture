@@ -1,14 +1,6 @@
 version: '3'
 
 services:
-  
-  php7:
-    volumes:
-      - ../data/www:/www
-    env_file:
-      - ../images/php/php.dev.env
-    logging:
-      driver: "json-file"
 
   legacy:
     volumes:
@@ -18,7 +10,7 @@ services:
     logging:
       driver: "json-file"
 
-  phpa:
+  php7:
     volumes:
       - ../data/www:/www
     env_file:
