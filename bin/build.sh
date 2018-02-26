@@ -2,6 +2,6 @@
 
 pushd ..
 
-docker-compose -f ./yml/docker-compose.yml -f ./yml/docker-compose.dev.yml up -d --build
+docker-compose -f ./yml/docker-compose.yml up -d --build
 
 popd
