@@ -1,4 +1,4 @@
-FROM nginx:1.13-alpine
+FROM nginx:alpine
 
 RUN apk update && apk add --no-cache --virtual .build-deps \
 	wget \
