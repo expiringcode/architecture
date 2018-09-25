@@ -17,10 +17,10 @@ RUN set -xe && curl -sS https://getcomposer.org/installer | php \
 	&& rm -Rf /etc/php/7.0/fpm/php.ini && mkdir -p /etc/php/7.0/fpm/
 
 RUN rm -Rf /etc/hhvm/php.ini && rm -Rf /etc/hhvm/server.ini
-COPY ./conf/* /etc/hhvm/
+COPY images/hhvm/conf/* /etc/hhvm/
 
-COPY entrypoint /usr/local/bin/
-COPY ./app .
+COPY images/hhvm/entrypoint /usr/local/bin/
+COPY ./data/app .
 
 RUN chmod +x /usr/local/bin/entrypoint && \
 	chown -R www-data:www-data $WORKDIR

@@ -2,12 +2,12 @@ version: '3'
 
 services:
 
-
   # BUILD PHP 5.6
   legacy: 
     image: ${REGISTRY}/${PROJECT_NAME}/php5:${VERSION}
     build: 
-      context: ../images/php/5.6
+      context: ../
+      dockerfile: images/php/5.6/Dockerfile
       args:
         PHP_MODS: $PHP_MODS
     restart: always
@@ -17,7 +17,7 @@ services:
     volumes:
       - backend_:/www
     env_file:
-      - ../images/php/php.env
+      - ../images/php/php.sample.env
     networks:
       - tier_3
       - tier_log
@@ -26,7 +26,8 @@ services:
   php7: 
     image: ${REGISTRY}/${PROJECT_NAME}/php7:${VERSION}
     build: 
-      context: ../images/php/alpine
+      context: ../
+      dockerfile: images/php/alpine/Dockerfile
       args:
         PHP_MODS: $PHP_MODS
     restart: always
@@ -36,7 +37,7 @@ services:
     volumes:
       - backend_:/www
     env_file:
-      - ../images/php/php.env
+      - ../images/php/php.sample.env
     networks:
       - tier_3
       - tier_log
@@ -44,7 +45,9 @@ services:
   # BUILD HHVM
   hhvm: 
     image: ${REGISTRY}/${PROJECT_NAME}/hhvm:${VERSION}
-    build: ./images/hhvm
+    build: 
+      context: ../
+      dockerfile: images/hhvm/Dockerfile
     restart: always
     tty: true
     expose: 
@@ -52,7 +55,7 @@ services:
     volumes:
       - backend_:/www
     env_file:
-      - ../images/php/php.env
+      - ../images/php/php.sample.env
     networks:
       - tier_3
       - tier_log
@@ -60,7 +63,9 @@ services:
   # MYSQL 
   mysql:
     image: ${REGISTRY}/${PROJECT_NAME}/mariadb:${VERSION}
-    build: ../images/mysql
+    build:
+      context: ../
+      dockerfile: images/mysql/Dockerfile
     volumes:
       - mysql_:/var/lib/mysql
     restart: always
@@ -68,7 +73,7 @@ services:
     expose: 
       - "3306"
     env_file:
-      - ../images/mysql/db.env
+      - ../images/mysql/db.sample.env
     networks:
       - tier_3
       - tier_log
@@ -76,7 +81,9 @@ services:
   # REDIS
   redis:
     image: ${REGISTRY}/${PROJECT_NAME}/redis:${VERSION}
-    build: ../images/redis
+    build: 
+      context: ../
+      dockerfile: images/redis/Dockerfile
     volumes:
       - redis_:/data
     expose: 
@@ -90,11 +97,13 @@ services:
   # NODE
   node:
     image: ${REGISTRY}/${PROJECT_NAME}/node:${VERSION}
-    build: ../images/node
+    build: 
+      context: ../
+      dockerfile: images/node/Dockerfile
     expose: 
       - "3000"
     env_file:
-      - ../images/node/node.env
+      - ../images/node/node.sample.env
     volumes: 
       - node_:/app
     restart: always
@@ -107,7 +116,9 @@ services:
   # mongodb 
   mongodb:
     image: ${REGISTRY}/${PROJECT_NAME}/mongo:${VERSION}
-    build: ../images/mongo
+    build: 
+      context: ../
+      dockerfile: images/mongo/Dockerfile
     restart: always
     tty: true
     volumes:
@@ -148,11 +159,13 @@ services:
   # nginx
   nginx:
     image: ${REGISTRY}/${PROJECT_NAME}/nginx:${VERSION}
-    build: ../images/nginx
+    build: 
+      context: ../
+      dockerfile: images/nginx/Dockerfile
     restart: always
     tty: true
     env_file: 
-      - ../images/nginx/proxy.env
+      - ../images/nginx/proxy.sample.env
     volumes:
       - backend_:/www
     expose:
@@ -188,11 +201,11 @@ networks:
     # internal: true
 
   tier_0:
-    external:
-      name: network_tier_0
+    # external:
+    #   name: network_tier_0
   tier_1:
-    external:
-      name: network_tier_1
+    # external:
+    #   name: network_tier_1
   tier_log:
-    external:
-      name: network_tier_log
+    # external:
+    #   name: network_tier_log

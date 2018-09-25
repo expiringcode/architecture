@@ -4,8 +4,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY entrypoint /usr/local/bin/
-COPY docker-healthcheck /usr/local/bin/
+COPY images/node/entrypoint /usr/local/bin/
+COPY images/node/docker-healthcheck /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/entrypoint \
 	&& chmod +x /usr/local/bin/docker-healthcheck

@@ -10,10 +10,10 @@ RUN set -xe && curl -sS https://getcomposer.org/installer | php
 RUN set -xe && mv composer.phar /usr/local/bin/composer 
 RUN set -xe && chmod +x /usr/local/bin/composer 
 
-COPY entrypoint /usr/local/bin/
+COPY images/php/5.6/entrypoint /usr/local/bin/
 
 RUN rm -Rf /etc/php/5.6/fpm/php.ini && mkdir -p /etc/php/5.6/fpm/ && chmod +x /usr/local/bin/entrypoint
-COPY ./conf/* /etc/php/5.6/fpm/
+COPY images/php/5.6/conf/* /etc/php/5.6/fpm/
 
 USER www-data
 
