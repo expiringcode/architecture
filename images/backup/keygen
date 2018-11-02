@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -rf /root/.ssh/id_rsa*
+ssh-keygen -q -b 2048 -t rsa -f /root/.ssh/id_rsa -P ""
