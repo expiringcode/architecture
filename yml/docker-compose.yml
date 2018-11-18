@@ -174,7 +174,18 @@ services:
       - tier_3
       - tier_log
       - tier_1
-
+  
+  # backup
+  backup:
+    image: ${REGISTRY}/${PROJECT_NAME}/backup:${VERSION}
+    build: 
+      context: ../
+      dockerfile: images/backup/Dockerfile
+    networks:
+      - tier_3
+      - tier_log
+      - tier_1
+      - tier_0
 volumes:
   node_:
   mongo_:
